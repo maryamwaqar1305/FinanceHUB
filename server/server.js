@@ -10,13 +10,13 @@ const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:5500',
     process.env.FRONTEND_URL
-].filter(Boolean);
+].filter(Boolean).map(o => o.trim());
 
 app.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (like curl, mobile apps, or same-origin)
+        console.log('Incoming origin:', JSON.stringify(origin));
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
+        if (allowedOrigins.includes(origin.trim())) {
             return callback(null, true);
         }
         return callback(new Error('Not allowed by CORS: ' + origin));
