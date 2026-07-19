@@ -1,0 +1,249 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — FinanceHub
+   Separated from main style.css for targeted mobile fixes
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet (max 1024px) ────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+  .dash-card--span2,
+  .dash-card--full {
+    grid-column: 1;
+  }
+  .investments-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+/* ── Mobile (max 768px) ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px !important;
+    height: 100vh;
+    z-index: 999;
+    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .sidebar.sidebar--open {
+    left: 0;
+    width: 280px !important;
+  }
+  .sidebar:hover {
+    width: 280px !important;
+  }
+  .sidebar .brand-text,
+  .sidebar .menu-item span,
+  .sidebar .sidebar-user-info,
+  .sidebar .sidebar-logout span {
+    opacity: 1;
+  }
+  .topbar-left { display: flex; align-items: center; gap: var(--sp-3); }
+  .topbar-brand { display: flex; }
+  .topbar {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: var(--sp-8);
+  }
+  .hero-text h1 { font-size: 2.25rem; }
+  .hero-text p { margin-left: auto; margin-right: auto; }
+  .hero-features { grid-template-columns: 1fr; }
+  .hero-visual { margin-top: var(--sp-8); }
+  .nav-links { display: none; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .hero-trust { flex-direction: column; text-align: center; }
+  .problem-solution { grid-template-columns: 1fr; }
+  .trust-stats { grid-template-columns: repeat(3, 1fr); }
+  .testimonials-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+  .section-header h2 { font-size: var(--fs-2xl); }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-3);
+  }
+  .kpi-card { padding: var(--sp-4); }
+  .kpi-value { font-size: var(--fs-lg); }
+  .kpi-badge { position: static; margin-top: var(--sp-2); }
+
+  .page-content { padding: var(--sp-4); }
+
+  .dash-hero { flex-direction: column; align-items: flex-start; }
+  .dash-hero-left { flex-direction: column; align-items: flex-start; width: 100%; }
+  .financial-score { width: 100%; }
+
+  .bottom-nav { display: flex; }
+  .fab { display: none; }
+  .app-footer { display: none; }
+
+  /* Transaction table — horizontal scroll instead of zoom-out */
+  .transaction-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .transaction-table::-webkit-scrollbar {
+    height: 4px;
+  }
+  .transaction-table::-webkit-scrollbar-thumb {
+    background: var(--surface-400);
+    border-radius: var(--r-full);
+  }
+  .table-header, .table-row {
+    min-width: 520px;
+    grid-template-columns: 80px 1fr 100px 100px 80px;
+  }
+
+  .settings-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .profile-actions { flex-direction: column; }
+  .modal-actions { flex-direction: column-reverse; }
+
+  .investment-stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-6);
+  }
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .auth-modal-content {
+    max-width: 100%;
+    margin: var(--sp-4);
+    width: calc(100% - var(--sp-8));
+  }
+  .auth-modal-body {
+    padding: var(--sp-4) var(--sp-6) var(--sp-6);
+  }
+  .auth-modal-header {
+    padding: var(--sp-6) var(--sp-6) var(--sp-3);
+  }
+  .auth-modal-footer {
+    padding: var(--sp-3) var(--sp-6) var(--sp-5);
+  }
+}
+
+/* ── Small Mobile (max 480px) ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-text h1 { font-size: 1.75rem; }
+  .preview-stats { grid-template-columns: 1fr; }
+  .modal-content {
+    margin: var(--sp-5);
+    width: calc(100% - var(--sp-10));
+  }
+  .page-content { padding: var(--sp-3); }
+  .topbar { padding: var(--sp-3); }
+  .landing-hero { padding: var(--sp-6) 0; }
+  .landing-header { padding: var(--sp-4) 0; }
+  .social-proof-bar { display: none; }
+  .trust-stats { grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+  .trust-stat { padding: var(--sp-4) var(--sp-3); }
+  .trust-stat-value { font-size: var(--fs-lg); }
+  .landing-section { padding: var(--sp-10) 0; }
+  .product-cards { grid-template-columns: 1fr; }
+
+  .dash-hero { padding: var(--sp-4); }
+  .dash-greeting h2 { font-size: var(--fs-lg); }
+
+  .kpi-card { padding: var(--sp-3); }
+  .kpi-value { font-size: var(--fs-base); }
+  .kpi-label { font-size: 10px; }
+  .kpi-icon { width: 36px; height: 36px; min-width: 36px; font-size: var(--fs-md); }
+
+  .dash-card-header { padding: var(--sp-3) var(--sp-4); }
+  .dash-card-body { padding: var(--sp-4); }
+
+  .table-header, .table-row {
+    grid-template-columns: 70px 1fr 80px 80px 60px;
+    padding: var(--sp-2) var(--sp-3);
+    font-size: var(--fs-xs);
+  }
+
+  .nav-brand span { display: none; }
+  .nav-actions .btn--outline { display: none; }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-6);
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--sp-2);
+    text-align: center;
+  }
+
+  .auth-modal-content {
+    margin: var(--sp-3);
+    width: calc(100% - var(--sp-6));
+    border-radius: var(--r-lg);
+  }
+  .auth-modal-body {
+    padding: var(--sp-4) var(--sp-5) var(--sp-5);
+  }
+  .auth-modal-header {
+    padding: var(--sp-5) var(--sp-5) var(--sp-3);
+  }
+  .auth-modal-header h3 { font-size: var(--fs-xl); }
+  .auth-modal-footer {
+    padding: var(--sp-3) var(--sp-5) var(--sp-4);
+  }
+}
+
+/* ── Very Small Mobile (max 375px) ──────────────────────────────────────── */
+@media (max-width: 375px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-2);
+  }
+  .hero-text h1 {
+    font-size: 1.5rem;
+  }
+  .hero-text p {
+    font-size: var(--fs-sm);
+  }
+  .modal-content {
+    margin: var(--sp-3);
+    width: calc(100% - var(--sp-6));
+    border-radius: var(--r-md);
+  }
+  .page-actions {
+    flex-direction: column;
+  }
+  .page-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-badge { font-size: 10px; }
+  .hero-trust span { font-size: var(--fs-xs); }
+  .trust-stats { grid-template-columns: 1fr 1fr; }
+  .section-header h2 { font-size: var(--fs-xl); }
+  .section-header p { font-size: var(--fs-sm); }
+  .faq-question { font-size: var(--fs-sm); }
+}
