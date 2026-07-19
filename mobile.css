@@ -1,3 +1,4 @@
+@media (max-width: 768px) {
 /* ═══════════════════════════════════════════════════════════════════════════
    FinanceHub — Mobile (max-width: 768px)
    Rebuilt from scratch — not a shrunk desktop
@@ -1571,3 +1572,5 @@ label { font-size: var(--fs-sm); color: var(--color-text-secondary); font-weight
 
 /* ── Page transition ─────────────────────────────────────────────────── */
 .page-content { animation: pageEntrance 0.3s var(--ease); }
+
+}

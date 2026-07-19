@@ -1,3 +1,4 @@
+@media (min-width: 769px) {
 /* ═══════════════════════════════════════════════════════════════════════════
    FinanceHub — Desktop (min-width: 769px)
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -1717,4 +1718,6 @@
   .product-cards { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
   .problem-solution { grid-template-columns: 1fr; }
+}
+
 }
