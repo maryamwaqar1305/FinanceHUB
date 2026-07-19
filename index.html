@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="desktop.css" media="(min-width: 769px)">
+    <link rel="stylesheet" href="mobile.css" media="(max-width: 768px)">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -690,6 +691,9 @@
         <main class="main-content" id="main-content">
             <header class="topbar">
                 <div class="topbar-left">
+                    <button class="sidebar-menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <span id="page-title" class="topbar-page-title">Dashboard</span>
                     <div class="topbar-brand">
                         <i class="fas fa-shield-halved"></i>
