@@ -137,6 +137,7 @@
 [data-color-scheme="light"] .topbar {
   background: var(--surface-100);
   border-bottom: 1px solid var(--color-border);
+}
 .navbar {
   display: flex;
   align-items: center;
@@ -236,6 +237,10 @@
 }
 .menu-item.active i { color: var(--color-primary); }
 
+.sidebar-profile { }
+.sidebar-avatar { }
+.sidebar-bottom { }
+.sidebar--collapsed { display: none; }
 .sidebar-user {
   display: flex;
   align-items: center;
@@ -983,6 +988,9 @@
   overflow: hidden;
 }
 
+.password-input { }
+.password-requirements { }
+
 .password-input-wrapper {
   position: relative;
   display: flex;
@@ -1630,6 +1638,75 @@ label { font-size: var(--fs-sm); color: var(--color-text-secondary); font-weight
 .reveal-stagger.revealed > *:nth-child(3) { transition-delay: 0.15s; }
 .reveal-stagger.revealed > *:nth-child(4) { transition-delay: 0.2s; }
 
+/* ── Nav (mobile) ──────────────────────────────────────────────────────── */
+.nav-link { font-size: var(--fs-sm); color: var(--color-text-secondary); cursor: pointer; }
+
+/* ── Card (mobile extras) ──────────────────────────────────────────────── */
+.card-body { padding: var(--sp-4); }
+.chart-card { }
+
+/* ── Form (mobile extras) ──────────────────────────────────────────────── */
+.form-label { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--color-text-secondary); margin-bottom: var(--sp-2); display: block; }
+.error-message { font-size: var(--fs-xs); color: var(--color-danger); margin-top: var(--sp-1); }
+
+/* ── KPI extras ────────────────────────────────────────────────────────── */
+.kpi-info { }
+
+/* ── Auth Modal extras ─────────────────────────────────────────────────── */
+.auth-icon { font-size: var(--fs-3xl); color: var(--color-primary); margin-bottom: var(--sp-3); }
+.auth-particle { position: absolute; border-radius: var(--r-full); background: var(--color-primary); opacity: 0.2; animation: particleFloat 4s ease-in-out infinite; }
+.auth-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.login-modal-backdrop { }
+.success-modal { }
+.requirement { font-size: var(--fs-xs); color: var(--color-text-muted); display: flex; align-items: center; gap: var(--sp-1); }
+
+/* ── Modal extras ──────────────────────────────────────────────────────── */
+.modal-close { position: absolute; top: var(--sp-3); right: var(--sp-3); background: none; border: none; color: var(--color-text-muted); font-size: var(--fs-xl); cursor: pointer; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+.modal-footer { padding: var(--sp-4) var(--sp-5); border-top: 1px solid var(--color-border); display: flex; gap: var(--sp-2); justify-content: flex-end; }
+
+/* ── Profile Modal ─────────────────────────────────────────────────────── */
+.profile-modal { }
+.profile-picture-section { display: flex; flex-direction: column; align-items: center; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+.profile-picture-container { position: relative; width: 96px; height: 96px; }
+.profile-picture { width: 100%; height: 100%; border-radius: var(--r-full); object-fit: cover; background: var(--surface-300); }
+.profile-picture-edit { position: absolute; bottom: 0; right: 0; width: 32px; height: 32px; border-radius: var(--r-full); background: var(--color-btn-primary-bg); color: var(--color-btn-primary-text); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: var(--fs-xs); }
+
+/* ── Budgets / Holdings / Insights pages ────────────────────────────────── */
+.budgets-grid { display: flex; flex-direction: column; gap: var(--sp-3); }
+.holdings-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.insights-grid { display: flex; flex-direction: column; gap: var(--sp-3); }
+.insights-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-4); }
+.investment-summary { display: flex; flex-direction: column; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.investment-summary .investment-summary { }
+
+/* ── Landing extras ────────────────────────────────────────────────────── */
+.proof-divider { width: 1px; height: 40px; background: var(--color-border); margin: var(--sp-2) 0; align-self: center; }
+.ps-solution { }
+.cta-content { text-align: center; }
+
+/* ── Reveal variants ───────────────────────────────────────────────────── */
+.reveal--left { opacity: 0; transform: translateX(-20px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
+.reveal--left.revealed { opacity: 1; transform: translateX(0); }
+.reveal--right { opacity: 0; transform: translateX(20px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
+.reveal--right.revealed { opacity: 1; transform: translateX(0); }
+.reveal--scale { opacity: 0; transform: scale(0.9); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
+.reveal--scale.revealed { opacity: 1; transform: scale(1); }
+
+/* ── Color helpers ──────────────────────────────────────────────────────── */
+.sky { color: var(--accent-sky-400); }
+.teal { color: var(--accent-teal-400); }
+.violet { color: var(--accent-violet-400); }
+
+/* ── Still-missing stragglers ────────────────────────────────────────────── */
+.bottom-nav-add { display: flex; align-items: center; justify-content: center; }
+.bottom-nav-add-btn { width: 40px; height: 40px; border-radius: var(--r-full); background: var(--color-btn-primary-bg); color: var(--color-btn-primary-text); border: none; display: flex; align-items: center; justify-content: center; font-size: var(--fs-lg); cursor: pointer; }
+.transaction-list { }
+.ai-insight-content { }
+.ai-insight-text { }
+
+/* ── Tilt effect ───────────────────────────────────────────────────────── */
+.tilt-card { transform-style: preserve-3d; }
+.tilt-shine { pointer-events: none; }
+
 /* ── Page transition ────────────────────────────────────────────────────── */
 .page-content { animation: pageEntrance 0.3s var(--ease); }
-}
