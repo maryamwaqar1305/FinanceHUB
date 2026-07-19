@@ -499,11 +499,15 @@ window.toggleMobileMenu = function() {
     console.log('toggleMobileMenu called');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('mobile-overlay');
-    
-    if (sidebar) sidebar.classList.toggle('sidebar--open');
-    if (overlay) overlay.classList.toggle('hidden');
+    if (!sidebar) return;
 
-    document.body.style.overflow = (sidebar && sidebar.classList.contains('sidebar--open')) ? 'hidden' : '';
+    if (window.innerWidth <= 768) {
+        sidebar.classList.toggle('sidebar--open');
+        if (overlay) overlay.classList.toggle('hidden');
+        document.body.style.overflow = sidebar.classList.contains('sidebar--open') ? 'hidden' : '';
+    } else {
+        document.querySelector('.app-container').classList.toggle('sidebar-expanded');
+    }
 }
 
 window.savePreferences = function() {
