@@ -474,6 +474,9 @@ window.toggleMobileMenu = function() {
     
     if (sidebar) sidebar.classList.toggle('mobile-open');
     if (overlay) overlay.classList.toggle('hidden');
+
+    // Toggle body scroll lock on mobile
+    document.body.style.overflow = (sidebar && sidebar.classList.contains('mobile-open')) ? 'hidden' : '';
 }
 
 window.savePreferences = function() {
@@ -784,8 +787,12 @@ function setupEventListeners() {
             console.log('Menu item clicked:', page);
             navigateTo(page);
             // Close mobile menu on navigation
-            if (window.innerWidth <= 768) {
-                toggleMobileMenu();
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                if (overlay) overlay.classList.add('hidden');
+                document.body.style.overflow = '';
             }
         });
     });
@@ -1367,12 +1374,22 @@ function calculateAndDisplayStats() {
     const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
     const netSavings = totalIncome - totalExpenses;
     const investmentValue = 0; // Placeholder for investments
+
+    // Calculate overall goals progress
+    const goals = getUserGoals();
+    let goalsProgress = 0;
+    if (goals.length > 0) {
+        const totalGoalTarget = goals.reduce((sum, g) => sum + g.target, 0);
+        const totalGoalCurrent = goals.reduce((sum, g) => sum + g.current, 0);
+        goalsProgress = totalGoalTarget > 0 ? Math.round((totalGoalCurrent / totalGoalTarget) * 100) : 0;
+    }
     
     // Update stats display
     updateElementText('total-income', formatCurrency(totalIncome));
     updateElementText('total-expenses', formatCurrency(totalExpenses));
     updateElementText('net-savings', formatCurrency(netSavings));
     updateElementText('investment-value', formatCurrency(investmentValue));
+    updateElementText('goals-progress', goalsProgress + '%');
 }
 
 function loadRecentTransactions() {
@@ -1666,15 +1683,30 @@ async function loadInvestments() {
                     labels: labels,
                     datasets: [{
                         data: values,
-                        backgroundColor: ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5', '#5D878F']
+                        backgroundColor: ['#2dd4bf', '#38bdf8', '#a78bfa', '#fbbf24', '#34d399'],
                     }]
                 },
-                options: {
+                    options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--color-text') } },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f1f5f9',
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                padding: 14
+                            }
+                        },
                         tooltip: {
+                            backgroundColor: 'rgba(15, 20, 32, 0.92)',
+                            borderColor: 'rgba(255, 255, 255, 0.08)',
+                            borderWidth: 1,
+                            titleColor: '#f1f5f9',
+                            bodyColor: '#94a3b8',
+                            padding: 12,
+                            cornerRadius: 8,
                             callbacks: {
                                 label: function(context) { return context.label + ': ' + formatCurrency(context.parsed); }
                             }
@@ -1793,6 +1825,143 @@ function createSpendingChart() {
     }
     
     const transactions = getUserTransactions();
+    
+    if (transactions.length === 0) {
+        canvas.style.display = 'none';
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+    }
+    
+    canvas.style.display = 'block';
+    if (emptyState) emptyState.classList.add('hidden');
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Build monthly income vs expenses line data for last 6 months
+    const trendData = {};
+    const labels = [];
+    const today = new Date();
+    
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        const monthYear = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+        labels.push(monthYear);
+        trendData[monthYear] = { income: 0, expense: 0 };
+    }
+    
+    transactions.forEach(t => {
+        const tDate = new Date(t.date + 'T00:00:00');
+        const monthYear = tDate.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+        
+        if (trendData[monthYear]) {
+            if (t.type === 'income') {
+                trendData[monthYear].income += t.amount;
+            } else if (t.type === 'expense') {
+                trendData[monthYear].expense += t.amount;
+            }
+        }
+    });
+    
+    const incomeData = labels.map(label => trendData[label] ? trendData[label].income : 0);
+    const expenseData = labels.map(label => trendData[label] ? trendData[label].expense : 0);
+    
+    const incomeGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    incomeGradient.addColorStop(0, 'rgba(45, 212, 191, 0.4)');
+    incomeGradient.addColorStop(1, 'rgba(45, 212, 191, 0.0)');
+    
+    const expenseGradient = ctx.createLinearGradient(0, 0, 0, 300);
+    expenseGradient.addColorStop(0, 'rgba(248, 113, 113, 0.35)');
+    expenseGradient.addColorStop(1, 'rgba(248, 113, 113, 0.0)');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    borderColor: '#2dd4bf',
+                    backgroundColor: incomeGradient,
+                    tension: 0.4,
+                    fill: { target: 'origin', above: incomeGradient },
+                    pointBackgroundColor: '#2dd4bf',
+                    pointBorderColor: '#2dd4bf',
+                    pointRadius: 3,
+                    pointHoverRadius: 6
+                },
+                {
+                    label: 'Expenses',
+                    data: expenseData,
+                    borderColor: '#f87171',
+                    backgroundColor: expenseGradient,
+                    tension: 0.4,
+                    fill: { target: 'origin', above: expenseGradient },
+                    pointBackgroundColor: '#f87171',
+                    pointBorderColor: '#f87171',
+                    pointRadius: 3,
+                    pointHoverRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return formatCurrency(value); },
+                        color: '#94a3b8'
+                    },
+                    grid: { color: 'rgba(255, 255, 255, 0.06)' }
+                },
+                x: {
+                    ticks: { color: '#94a3b8' },
+                    grid: { color: 'rgba(255, 255, 255, 0.06)' }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { color: '#f1f5f9', usePointStyle: true, pointStyle: 'circle', padding: 16 }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    backgroundColor: 'rgba(15, 20, 32, 0.92)',
+                    borderColor: 'rgba(255, 255, 255, 0.08)',
+                    borderWidth: 1,
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#94a3b8',
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+                        }
+                    }
+                }
+            },
+            hover: { mode: 'nearest', intersect: true },
+            animation: { duration: 1200, easing: 'easeOutQuart' }
+        }
+    });
+}
+
+function createTrendChart() {
+    const canvas = document.getElementById('trend-chart');
+    const emptyState = document.getElementById('no-trend-data');
+    
+    if (!canvas) return;
+    
+    // Destroy existing chart instance to prevent memory leaks and conflicts
+    let chartInstance = Chart.getChart(canvas);
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+    
+    const transactions = getUserTransactions();
     const expenses = transactions.filter(t => t.type === 'expense');
     
     if (expenses.length === 0) {
@@ -1817,180 +1986,45 @@ function createSpendingChart() {
             labels: Object.keys(expensesByCategory),
             datasets: [{
                 data: Object.values(expensesByCategory),
-                backgroundColor: ['#1FB8CD', '#FFC185', '#B4413C', '#ECEBD5', '#5D878F', '#DB4545', '#D2BA4C', '#964325', '#944454', '#13343B']
+                backgroundColor: ['#2dd4bf', '#38bdf8', '#a78bfa', '#fbbf24', '#34d399', '#f87171', '#818cf8', '#fb923c', '#e879f9', '#94a3b8'],
+                borderColor: '#0f1420',
+                borderWidth: 2,
+                hoverOffset: 8
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            cutout: '65%',
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        // Dynamically set label color for theme compatibility
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-text') 
+                        color: '#f1f5f9',
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        padding: 14,
+                        font: { size: 12 }
                     }
                 },
                 tooltip: {
+                    backgroundColor: 'rgba(15, 20, 32, 0.92)',
+                    borderColor: 'rgba(255, 255, 255, 0.08)',
+                    borderWidth: 1,
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#94a3b8',
+                    padding: 12,
+                    cornerRadius: 8,
                     callbacks: {
                         label: function(context) {
-                            return context.label + ': ' + formatCurrency(context.parsed);
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const pct = ((context.parsed / total) * 100).toFixed(1);
+                            return context.label + ': ' + formatCurrency(context.parsed) + ' (' + pct + '%)';
                         }
                     }
                 }
             },
-            animation: {
-                duration: 1500,
-                easing: 'easeOutQuart'
-            }
-        }
-    });
-}
-
-function createTrendChart() {
-    const canvas = document.getElementById('trend-chart');
-    const emptyState = document.getElementById('no-trend-data');
-    
-    if (!canvas) return;
-    
-    // Destroy existing chart instance to prevent memory leaks and conflicts
-    let chartInstance = Chart.getChart(canvas);
-    if (chartInstance) {
-        chartInstance.destroy();
-    }
-    
-    const transactions = getUserTransactions();
-    
-    if (transactions.length === 0) {
-        canvas.style.display = 'none';
-        if (emptyState) emptyState.classList.remove('hidden');
-        return;
-    }
-    
-    canvas.style.display = 'block';
-    if (emptyState) emptyState.classList.add('hidden');
-    
-    const ctx = canvas.getContext('2d');
-    
-    // Create a data map for the last 6 months (Month-Year key)
-    const trendData = {};
-    const labels = [];
-    const today = new Date();
-    
-    for (let i = 5; i >= 0; i--) {
-        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-        const monthYear = d.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-        labels.push(monthYear);
-        trendData[monthYear] = { income: 0, expense: 0 };
-    }
-    
-    transactions.forEach(t => {
-        // Ensure transactions are consistently dated as start-of-day
-        const tDate = new Date(t.date + 'T00:00:00'); 
-        const monthYear = tDate.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-        
-        if (trendData[monthYear]) {
-            if (t.type === 'income') {
-                trendData[monthYear].income += t.amount;
-            } else if (t.type === 'expense') {
-                trendData[monthYear].expense += t.amount;
-            }
-        }
-    });
-    
-    const incomeData = labels.map(label => trendData[label] ? trendData[label].income : 0);
-    const expenseData = labels.map(label => trendData[label] ? trendData[label].expense : 0);
-    
-    const incomeGradient = ctx.createLinearGradient(0, 0, 0, 400);
-    incomeGradient.addColorStop(0, 'rgba(31, 184, 205, 0.5)');
-    incomeGradient.addColorStop(1, 'rgba(31, 184, 205, 0.0)');
-    
-    const expenseGradient = ctx.createLinearGradient(0, 0, 0, 400);
-    expenseGradient.addColorStop(0, 'rgba(180, 65, 60, 0.5)');
-    expenseGradient.addColorStop(1, 'rgba(180, 65, 60, 0.0)');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Income',
-                    data: incomeData,
-                    borderColor: '#1FB8CD',
-                    backgroundColor: incomeGradient,
-                    tension: 0.4,
-                    fill: {
-                        target: 'origin',
-                        above: incomeGradient
-                    },
-                    pointBackgroundColor: '#1FB8CD'
-                },
-                {
-                    label: 'Expenses',
-                    data: expenseData,
-                    borderColor: '#B4413C',
-                    backgroundColor: expenseGradient,
-                    tension: 0.4,
-                    fill: {
-                        target: 'origin',
-                        above: expenseGradient
-                    },
-                    pointBackgroundColor: '#B4413C'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return formatCurrency(value);
-                        },
-                        // Dynamically set tick color for theme compatibility
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-text')
-                    },
-                    grid: {
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-border')
-                    }
-                },
-                x: {
-                    ticks: {
-                         color: getComputedStyle(document.documentElement).getPropertyValue('--color-text')
-                    },
-                    grid: {
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-border')
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--color-text') 
-                    }
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
-                        }
-                    }
-                }
-            },
-            hover: {
-                mode: 'nearest',
-                intersect: true
-            },
-            animation: {
-                duration: 1500,
-                easing: 'easeOutQuart'
-            }
+            animation: { duration: 1200, easing: 'easeOutQuart' }
         }
     });
 }

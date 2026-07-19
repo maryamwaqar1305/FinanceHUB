@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-color-scheme="dark">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceHub - Secure Personal Finance Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0e17">
+    <meta name="description" content="FinanceHub - Sustainable personal finance management for 2027">
+    <title>FinanceHub — Sustainable Personal Finance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -20,7 +25,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Confirm Logout</h3>
-                <i class="fas fa-sign-out-alt"></i>
+                <i class="fas fa-right-from-bracket"></i>
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to logout?</p>
@@ -38,7 +43,7 @@
             <div class="modal-header">
                 <h3 id="feature-info-title">Feature Details</h3>
                 <button class="modal-close" onclick="hideFeatureInfo()">
-                    <i class="fas fa-times"></i>
+                    <i class="fas fa-xmark"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -49,12 +54,13 @@
             </div>
         </div>
     </div>
+
     <div id="success-modal" class="modal hidden">
         <div class="modal-overlay" onclick="hideSuccessModal()"></div>
         <div class="modal-content success-modal">
             <div class="modal-header">
                 <h3 id="success-title">Success!</h3>
-                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-circle-check"></i>
             </div>
             <div class="modal-body">
                 <p id="success-message">Operation completed successfully!</p>
@@ -73,16 +79,17 @@
         </div>
     </div>
 
+    <!-- ═══════════════ LANDING PAGE ═══════════════ -->
     <div id="landing-page" class="landing-container">
         <div class="landing-header">
             <div class="container">
                 <nav class="navbar">
                     <div class="nav-brand">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-shield-halved"></i>
                         <span>FinanceHub</span>
                     </div>
                     <div class="nav-actions">
-                        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
                             <i class="fas fa-moon" id="theme-icon"></i>
                         </button>
                         <button class="btn btn--outline" onclick="showLogin()">Login</button>
@@ -92,17 +99,17 @@
             </div>
         </div>
 
-        <div class="landing-hero">
+        <section class="landing-hero">
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
-                        <h1>Secure Personal Finance Management</h1>
+                        <h1>Sustainable Finance for 2027</h1>
                         <p>Take complete control of your finances with bank-level security, intelligent insights, and
-                            personalized financial planning. Support for Indian Rupee (₹) and international currencies.
+                            personalized financial planning. Multi-currency support with Indian Rupee and global currencies.
                         </p>
                         <div class="hero-features">
                             <button class="feature-item btn--feature" onclick="showFeatureInfo('security')">
-                                <i class="fas fa-shield-alt"></i>
+                                <i class="fas fa-shield-halved"></i>
                                 <span>Bank-Level Security</span>
                             </button>
                             <button class="feature-item btn--feature" onclick="showFeatureInfo('analytics')">
@@ -110,15 +117,15 @@
                                 <span>Smart Analytics</span>
                             </button>
                             <button class="feature-item btn--feature" onclick="showFeatureInfo('goals')">
-                                <i class="fas fa-target"></i>
+                                <i class="fas fa-crosshairs"></i>
                                 <span>Goal Tracking</span>
                             </button>
                             <button class="feature-item btn--feature" onclick="showFeatureInfo('currency')">
-                                <i class="fas fa-rupee-sign"></i>
+                                <i class="fas fa-coins"></i>
                                 <span>Multi-Currency</span>
                             </button>
                         </div>
-                        <button class="btn btn--primary btn--lg hero-cta" onclick="showRegister()">
+                        <button class="btn btn--lg hero-cta" onclick="showRegister()">
                             <i class="fas fa-rocket"></i>
                             Start Your Financial Journey
                         </button>
@@ -150,44 +157,37 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
+    <!-- ═══════════════ AUTH MODALS ═══════════════ -->
     <div id="login-modal" class="modal hidden">
         <div class="modal-overlay" onclick="hideLogin()"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Welcome Back</h3>
-                <button class="modal-close" onclick="hideLogin()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="hideLogin()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="login-form" class="modal-body">
                 <div class="form-group">
                     <label class="form-label" for="login-email">Email Address</label>
-                    <input type="email" class="form-control" id="login-email" placeholder="Enter your registered email"
-                        required>
+                    <input type="email" class="form-control" id="login-email" placeholder="you@example.com" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="login-password">Password</label>
                     <div class="password-input">
-                        <input type="password" class="form-control" id="login-password"
-                            placeholder="Enter your password" required>
-                        <button type="button" class="password-toggle"
-                            onclick="togglePasswordVisibility('login-password')">
+                        <input type="password" class="form-control" id="login-password" placeholder="Enter password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('login-password')">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                 </div>
                 <div id="login-error" class="error-message hidden"></div>
                 <button type="submit" class="btn btn--primary btn--full-width">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Sign In Securely
+                    <i class="fas fa-right-to-bracket"></i> Sign In Securely
                 </button>
                 <div class="forgot-password">
-                    <button type="button" class="btn btn--link" onclick="showForgotPassword()">
-                        Forgot Password?
-                    </button>
+                    <button type="button" class="btn btn--ghost" onclick="showForgotPassword()">Forgot Password?</button>
                 </div>
             </form>
             <div class="modal-footer">
@@ -201,20 +201,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Create Your Account</h3>
-                <button class="modal-close" onclick="hideRegister()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="hideRegister()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="register-form" class="modal-body">
                 <div class="form-group">
                     <label class="form-label" for="register-name">Full Name</label>
-                    <input type="text" class="form-control" id="register-name" placeholder="Enter your full name"
-                        required>
+                    <input type="text" class="form-control" id="register-name" placeholder="Your full name" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="register-email">Email Address</label>
-                    <input type="email" class="form-control" id="register-email"
-                        placeholder="Enter a valid email address" required>
+                    <input type="email" class="form-control" id="register-email" placeholder="you@example.com" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="register-phone">Phone Number</label>
@@ -223,40 +219,22 @@
                 <div class="form-group">
                     <label class="form-label" for="register-password">Password</label>
                     <div class="password-input">
-                        <input type="password" class="form-control" id="register-password"
-                            placeholder="Create a strong password" required>
-                        <button type="button" class="password-toggle"
-                            onclick="togglePasswordVisibility('register-password')">
+                        <input type="password" class="form-control" id="register-password" placeholder="Create a strong password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('register-password')">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="password-requirements">
-                        <div class="requirement" id="req-length">
-                            <i class="fas fa-times"></i>
-                            At least 8 characters
-                        </div>
-                        <div class="requirement" id="req-uppercase">
-                            <i class="fas fa-times"></i>
-                            One uppercase letter
-                        </div>
-                        <div class="requirement" id="req-lowercase">
-                            <i class="fas fa-times"></i>
-                            One lowercase letter
-                        </div>
-                        <div class="requirement" id="req-number">
-                            <i class="fas fa-times"></i>
-                            One number
-                        </div>
-                        <div class="requirement" id="req-special">
-                            <i class="fas fa-times"></i>
-                            One special character
-                        </div>
+                        <div class="requirement" id="req-length"><i class="fas fa-xmark"></i> At least 8 characters</div>
+                        <div class="requirement" id="req-uppercase"><i class="fas fa-xmark"></i> One uppercase letter</div>
+                        <div class="requirement" id="req-lowercase"><i class="fas fa-xmark"></i> One lowercase letter</div>
+                        <div class="requirement" id="req-number"><i class="fas fa-xmark"></i> One number</div>
+                        <div class="requirement" id="req-special"><i class="fas fa-xmark"></i> One special character</div>
                     </div>
                 </div>
                 <div id="register-error" class="error-message hidden"></div>
                 <button type="submit" class="btn btn--primary btn--full-width">
-                    <i class="fas fa-user-plus"></i>
-                    Create Secure Account
+                    <i class="fas fa-user-plus"></i> Create Secure Account
                 </button>
             </form>
             <div class="modal-footer">
@@ -270,20 +248,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Reset Password</h3>
-                <button class="modal-close" onclick="hideForgotPassword()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="hideForgotPassword()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="forgot-password-form" class="modal-body">
                 <div class="form-group">
                     <label class="form-label" for="forgot-email">Email Address</label>
-                    <input type="email" class="form-control" id="forgot-email" placeholder="Enter your registered email"
-                        required>
+                    <input type="email" class="form-control" id="forgot-email" placeholder="you@example.com" required>
                 </div>
                 <div id="forgot-error" class="error-message hidden"></div>
                 <button type="submit" class="btn btn--primary btn--full-width">
-                    <i class="fas fa-paper-plane"></i>
-                    Send Reset Link
+                    <i class="fas fa-paper-plane"></i> Send Reset Link
                 </button>
             </form>
             <div class="modal-footer">
@@ -292,17 +266,18 @@
         </div>
     </div>
 
+    <!-- ═══════════════ MAIN APPLICATION ═══════════════ -->
     <div id="main-app" class="app-container hidden">
         <div id="mobile-overlay" class="mobile-overlay hidden" onclick="toggleMobileMenu()"></div>
 
-        <nav class="sidebar" id="sidebar">
+        <nav class="sidebar" id="sidebar" aria-label="Main navigation">
             <div class="sidebar-header">
                 <div class="brand">
-                    <i class="fas fa-shield-alt"></i>
+                    <i class="fas fa-shield-halved"></i>
                     <span>FinanceHub</span>
                 </div>
-                <button class="mobile-menu-close" onclick="toggleMobileMenu()">
-                    <i class="fas fa-times"></i>
+                <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Close menu">
+                    <i class="fas fa-xmark"></i>
                 </button>
             </div>
 
@@ -321,11 +296,11 @@
 
             <div class="sidebar-menu">
                 <div class="menu-item active" data-page="dashboard">
-                    <i class="fas fa-tachometer-alt"></i>
+                    <i class="fas fa-grid-2"></i>
                     <span>Dashboard</span>
                 </div>
                 <div class="menu-item" data-page="transactions">
-                    <i class="fas fa-exchange-alt"></i>
+                    <i class="fas fa-arrows-left-right"></i>
                     <span>Transactions</span>
                 </div>
                 <div class="menu-item" data-page="budgets">
@@ -333,7 +308,7 @@
                     <span>Budgets</span>
                 </div>
                 <div class="menu-item" data-page="goals">
-                    <i class="fas fa-bullseye"></i>
+                    <i class="fas fa-crosshairs"></i>
                     <span>Goals</span>
                 </div>
                 <div class="menu-item" data-page="investments">
@@ -345,18 +320,18 @@
                     <span>AI Insights</span>
                 </div>
                 <div class="menu-item" onclick="showMyProfile()">
-                    <i class="fas fa-user-circle"></i>
+                    <i class="fas fa-circle-user"></i>
                     <span>My Profile</span>
                 </div>
                 <div class="menu-item" data-page="settings">
-                    <i class="fas fa-cog"></i>
+                    <i class="fas fa-gear"></i>
                     <span>Settings</span>
                 </div>
             </div>
+
             <div class="sidebar-footer">
-                <button class="btn btn--outline btn--full-width" onclick="initiateLogout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Sign Out
+                <button class="btn btn--danger btn--full-width" onclick="initiateLogout()">
+                    <i class="fas fa-right-from-bracket"></i> Sign Out
                 </button>
             </div>
         </nav>
@@ -364,13 +339,13 @@
         <main class="main-content">
             <header class="app-header">
                 <div class="header-left">
-                    <button class="sidebar-menu-toggle btn-icon" onclick="toggleMobileMenu()">
+                    <button class="sidebar-menu-toggle btn-icon" onclick="toggleMobileMenu()" aria-label="Open menu">
                         <i class="fas fa-bars"></i>
                     </button>
                     <h1 id="page-title">Dashboard</h1>
                 </div>
                 <div class="header-actions">
-                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
                         <i class="fas fa-moon" id="theme-icon-header"></i>
                     </button>
                     <div class="user-info" onclick="showMyProfile()">
@@ -382,33 +357,31 @@
                 </div>
             </header>
 
+            <!-- ═══════ DASHBOARD PAGE ═══════ -->
             <div id="dashboard-page" class="page-content">
                 <div id="welcome-message" class="welcome-card hidden">
-                    <div class="welcome-content">
-                        <div class="welcome-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h2>Welcome to FinanceHub!</h2>
-                        <p>Let's get you started on your financial journey. Add your first transaction or set up a
-                            financial goal to begin.</p>
-                        <div class="welcome-actions">
-                            <button class="btn btn--primary" onclick="showTransactionModal()">
-                                <i class="fas fa-plus"></i>
-                                Add First Transaction
-                            </button>
-                            <button class="btn btn--outline" onclick="showGoalModal()">
-                                <i class="fas fa-bullseye"></i>
-                                Set First Goal
-                            </button>
-                        </div>
+                    <div class="welcome-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2>Welcome to FinanceHub!</h2>
+                    <p>Let's get you started on your financial journey. Add your first transaction or set up a
+                        financial goal to begin.</p>
+                    <div class="welcome-actions">
+                        <button class="btn btn--primary" onclick="showTransactionModal()">
+                            <i class="fas fa-plus"></i> Add First Transaction
+                        </button>
+                        <button class="btn btn--outline" onclick="showGoalModal()">
+                            <i class="fas fa-crosshairs"></i> Set First Goal
+                        </button>
                     </div>
                 </div>
 
                 <div id="dashboard-content">
+                    <!-- 5 KPI Metric Cards -->
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon" style="background: var(--color-bg-3);">
-                                <i class="fas fa-arrow-up"></i>
+                            <div class="stat-icon">
+                                <i class="fas fa-wallet"></i>
                             </div>
                             <div class="stat-info">
                                 <div class="stat-value" id="total-income">₹0</div>
@@ -416,16 +389,16 @@
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon" style="background: var(--color-bg-4);">
-                                <i class="fas fa-arrow-down"></i>
+                            <div class="stat-icon">
+                                <i class="fas fa-arrow-trend-down"></i>
                             </div>
                             <div class="stat-info">
                                 <div class="stat-value" id="total-expenses">₹0</div>
-                                <div class="stat-label">Total Expenses</div>
+                                <div class="stat-label">Monthly Burn</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon" style="background: var(--color-bg-1);">
+                            <div class="stat-icon">
                                 <i class="fas fa-piggy-bank"></i>
                             </div>
                             <div class="stat-info">
@@ -434,20 +407,31 @@
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon" style="background: var(--color-bg-5);">
-                                <i class="fas fa-chart-line"></i>
+                            <div class="stat-icon">
+                                <i class="fas fa-arrow-trend-up"></i>
                             </div>
                             <div class="stat-info">
                                 <div class="stat-value" id="investment-value">₹0</div>
-                                <div class="stat-label">Investments</div>
+                                <div class="stat-label">Total ROI</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="goals-progress">0%</div>
+                                <div class="stat-label">Goals Progress</div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Charts: Portfolio Performance + Asset Allocation -->
                     <div class="dashboard-grid">
                         <div class="chart-card">
                             <div class="card-header">
-                                <h3>Spending Overview</h3>
+                                <h3>Portfolio Performance</h3>
+                                <span class="status status--success"><i class="fas fa-arrow-up"></i> Live</span>
                             </div>
                             <div class="card-body">
                                 <div class="chart-container" style="height: 300px; position: relative;">
@@ -455,15 +439,15 @@
                                     <div id="no-expense-data" class="empty-state hidden">
                                         <i class="fas fa-chart-pie"></i>
                                         <p>No expense data yet</p>
-                                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add
-                                            Expense</button>
+                                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add Expense</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="chart-card">
                             <div class="card-header">
-                                <h3>Monthly Trend</h3>
+                                <h3>Asset Allocation</h3>
+                                <span class="status status--info"><i class="fas fa-chart-simple"></i> Trend</span>
                             </div>
                             <div class="card-body">
                                 <div class="chart-container" style="height: 300px; position: relative;">
@@ -471,27 +455,25 @@
                                     <div id="no-trend-data" class="empty-state hidden">
                                         <i class="fas fa-chart-line"></i>
                                         <p>Build your financial history</p>
-                                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Start
-                                            Tracking</button>
+                                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Start Tracking</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Recent Transactions -->
                     <div class="recent-transactions">
                         <div class="card">
                             <div class="card-header">
                                 <h3>Recent Transactions</h3>
-                                <button class="btn btn--sm btn--primary" onclick="navigateTo('transactions')">View
-                                    All</button>
+                                <button class="btn btn--sm btn--primary" onclick="navigateTo('transactions')">View All</button>
                             </div>
                             <div class="transaction-list" id="recent-transactions-list">
                                 <div class="empty-state">
                                     <i class="fas fa-receipt"></i>
                                     <p>No transactions yet</p>
-                                    <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add
-                                        Transaction</button>
+                                    <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add Transaction</button>
                                 </div>
                             </div>
                         </div>
@@ -499,14 +481,13 @@
                 </div>
             </div>
 
+            <!-- ═══════ PROFILE MODAL ═══════ -->
             <div id="profile-modal" class="modal hidden">
                 <div class="modal-overlay" onclick="hideMyProfile()"></div>
                 <div class="modal-content profile-modal">
                     <div class="modal-header">
                         <h3>My Profile</h3>
-                        <button class="modal-close" onclick="hideMyProfile()">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <button class="modal-close" onclick="hideMyProfile()"><i class="fas fa-xmark"></i></button>
                     </div>
                     <div class="modal-body">
                         <div class="profile-picture-section">
@@ -520,7 +501,6 @@
                                 <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
                             </div>
                         </div>
-
                         <form id="profile-form">
                             <div class="form-row">
                                 <div class="form-group">
@@ -547,22 +527,18 @@
                             <div class="form-group">
                                 <label class="form-label" for="current-password">Current Password</label>
                                 <div class="password-input">
-                                    <input type="password" class="form-control" id="current-password"
-                                        placeholder="Enter current password to save changes" required>
-                                    <button type="button" class="password-toggle"
-                                        onclick="togglePasswordVisibility('current-password')">
+                                    <input type="password" class="form-control" id="current-password" placeholder="Enter current password to save changes" required>
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('current-password')">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
                             </div>
                             <div class="profile-actions">
                                 <button type="button" class="btn btn--outline" onclick="showChangePassword()">
-                                    <i class="fas fa-key"></i>
-                                    Change Password
+                                    <i class="fas fa-key"></i> Change Password
                                 </button>
                                 <button type="submit" class="btn btn--primary">
-                                    <i class="fas fa-save"></i>
-                                    Save Profile
+                                    <i class="fas fa-floppy-disk"></i> Save Profile
                                 </button>
                             </div>
                         </form>
@@ -575,65 +551,50 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>Change Password</h3>
-                        <button class="modal-close" onclick="hideChangePassword()">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <button class="modal-close" onclick="hideChangePassword()"><i class="fas fa-xmark"></i></button>
                     </div>
                     <form id="change-password-form" class="modal-body">
                         <div class="form-group">
                             <label class="form-label" for="old-password">Current Password</label>
                             <div class="password-input">
                                 <input type="password" class="form-control" id="old-password" required>
-                                <button type="button" class="password-toggle"
-                                    onclick="togglePasswordVisibility('old-password')">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('old-password')"><i class="fas fa-eye"></i></button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="new-password">New Password</label>
                             <div class="password-input">
                                 <input type="password" class="form-control" id="new-password" required>
-                                <button type="button" class="password-toggle"
-                                    onclick="togglePasswordVisibility('new-password')">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new-password')"><i class="fas fa-eye"></i></button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="confirm-new-password">Confirm New Password</label>
                             <div class="password-input">
                                 <input type="password" class="form-control" id="confirm-new-password" required>
-                                <button type="button" class="password-toggle"
-                                    onclick="togglePasswordVisibility('confirm-new-password')">
-                                    <i class="fas fa-eye"></i>
-                                </button>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-new-password')"><i class="fas fa-eye"></i></button>
                             </div>
                         </div>
                         <div id="password-change-error" class="error-message hidden"></div>
                         <button type="submit" class="btn btn--primary btn--full-width">
-                            <i class="fas fa-key"></i>
-                            Update Password
+                            <i class="fas fa-key"></i> Update Password
                         </button>
                     </form>
                 </div>
             </div>
 
+            <!-- ═══════ TRANSACTIONS PAGE ═══════ -->
             <div id="transactions-page" class="page-content hidden">
-                <div class="page-actions" style="display: flex; gap: 10px;">
-                    <input type="file" id="csv-import-input" accept=".csv" style="display: none;"
-                        onchange="importCSV(event)">
+                <div class="page-actions">
+                    <input type="file" id="csv-import-input" accept=".csv" style="display: none;" onchange="importCSV(event)">
                     <button class="btn btn--outline" onclick="document.getElementById('csv-import-input').click()">
-                        <i class="fas fa-file-import"></i>
-                        Import CSV
+                        <i class="fas fa-file-import"></i> Import CSV
                     </button>
                     <button class="btn btn--outline" onclick="exportDataToPDF()">
-                        <i class="fas fa-file-pdf"></i>
-                        Export PDF
+                        <i class="fas fa-file-pdf"></i> Export PDF
                     </button>
                     <button class="btn btn--primary" onclick="showTransactionModal()">
-                        <i class="fas fa-plus"></i>
-                        Add Transaction
+                        <i class="fas fa-plus"></i> Add Transaction
                     </button>
                 </div>
 
@@ -660,54 +621,50 @@
                             <div class="empty-state">
                                 <i class="fas fa-receipt"></i>
                                 <p>No transactions found</p>
-                                <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add Your First
-                                    Transaction</button>
+                                <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add Your First Transaction</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- ═══════ BUDGETS PAGE ═══════ -->
             <div id="budgets-page" class="page-content hidden">
                 <div class="page-actions">
                     <button class="btn btn--primary" onclick="showBudgetModal()">
-                        <i class="fas fa-plus"></i>
-                        Create Budget
+                        <i class="fas fa-plus"></i> Create Budget
                     </button>
                 </div>
-
                 <div class="budgets-grid" id="budgets-grid">
                     <div class="empty-state">
                         <i class="fas fa-calculator"></i>
                         <p>No budgets created yet</p>
-                        <button class="btn btn--primary btn--sm" onclick="showBudgetModal()">Create Your First
-                            Budget</button>
+                        <button class="btn btn--primary btn--sm" onclick="showBudgetModal()">Create Your First Budget</button>
                     </div>
                 </div>
             </div>
 
+            <!-- ═══════ GOALS PAGE ═══════ -->
             <div id="goals-page" class="page-content hidden">
                 <div class="page-actions">
                     <button class="btn btn--primary" onclick="showGoalModal()">
-                        <i class="fas fa-plus"></i>
-                        Add Goal
+                        <i class="fas fa-plus"></i> Add Goal
                     </button>
                 </div>
-
                 <div class="goals-grid" id="goals-grid">
                     <div class="empty-state">
-                        <i class="fas fa-bullseye"></i>
+                        <i class="fas fa-crosshairs"></i>
                         <p>No financial goals set yet</p>
                         <button class="btn btn--primary btn--sm" onclick="showGoalModal()">Set Your First Goal</button>
                     </div>
                 </div>
             </div>
 
+            <!-- ═══════ INVESTMENTS PAGE ═══════ -->
             <div id="investments-page" class="page-content hidden">
-                <div class="page-actions" style="margin-bottom: var(--space-20);">
+                <div class="page-actions">
                     <button class="btn btn--primary" onclick="showAddHoldingModal()">
-                        <i class="fas fa-plus"></i>
-                        Add Holding
+                        <i class="fas fa-plus"></i> Add Holding
                     </button>
                 </div>
                 <div class="investment-summary">
@@ -715,8 +672,7 @@
                         <div class="card-header">
                             <h3>Portfolio Overview</h3>
                         </div>
-                        <div class="card-body"
-                            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-20); text-align: center;">
+                        <div class="card-body" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); text-align: center;">
                             <div class="stat-item">
                                 <div class="stat-value">₹0</div>
                                 <div class="stat-label">Total Value</div>
@@ -732,7 +688,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="investments-grid">
                     <div class="chart-card">
                         <div class="card-header">
@@ -751,9 +706,7 @@
                     </div>
                     <div class="holdings-list">
                         <div class="card">
-                            <div class="card-header">
-                                <h3>Holdings</h3>
-                            </div>
+                            <div class="card-header"><h3>Holdings</h3></div>
                             <div class="card-body">
                                 <div id="investments-list">
                                     <div class="empty-state">
@@ -768,12 +721,12 @@
                 </div>
             </div>
 
+            <!-- ═══════ INSIGHTS PAGE ═══════ -->
             <div id="insights-page" class="page-content hidden">
-                <div class="insights-header" style="margin-bottom: var(--space-24);">
+                <div class="insights-header" style="margin-bottom: var(--sp-6);">
                     <h2>AI-Powered Financial Insights</h2>
                     <p class="mt-8">Personalized recommendations based on your financial behavior</p>
                 </div>
-
                 <div class="insights-grid" id="insights-grid">
                     <div class="empty-state">
                         <i class="fas fa-lightbulb"></i>
@@ -783,12 +736,11 @@
                 </div>
             </div>
 
+            <!-- ═══════ SETTINGS PAGE ═══════ -->
             <div id="settings-page" class="page-content hidden">
                 <div class="settings-grid">
                     <div class="card">
-                        <div class="card-header">
-                            <h3>Preferences</h3>
-                        </div>
+                        <div class="card-header"><h3>Preferences</h3></div>
                         <div class="card-body">
                             <div class="form-group">
                                 <label class="form-label" for="currency-select">Currency</label>
@@ -810,22 +762,17 @@
                             <button class="btn btn--primary" onclick="savePreferences()">Save Preferences</button>
                         </div>
                     </div>
-
                     <div class="card">
-                        <div class="card-header">
-                            <h3>Security</h3>
-                        </div>
+                        <div class="card-header"><h3>Security</h3></div>
                         <div class="card-body">
                             <div class="form-group">
                                 <button class="btn btn--outline btn--full-width" onclick="showChangePassword()">
-                                    <i class="fas fa-key"></i>
-                                    Change Password
+                                    <i class="fas fa-key"></i> Change Password
                                 </button>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn--outline btn--full-width" onclick="exportData()">
-                                    <i class="fas fa-download"></i>
-                                    Export Data
+                                    <i class="fas fa-download"></i> Export Data
                                 </button>
                             </div>
                         </div>
@@ -835,14 +782,13 @@
         </main>
     </div>
 
+    <!-- ═══════════════ TRANSACTION MODAL ═══════════════ -->
     <div id="transaction-modal" class="modal hidden">
         <div class="modal-overlay" onclick="hideTransactionModal()"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="transaction-modal-title">Add Transaction</h3>
-                <button class="modal-close" onclick="hideTransactionModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="hideTransactionModal()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="transaction-form" class="modal-body">
                 <div class="form-group">
@@ -854,25 +800,22 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="transaction-amount">Amount (₹)</label>
-                    <input type="number" step="0.01" class="form-control" id="transaction-amount" placeholder="0.00"
-                        required>
+                    <input type="number" step="0.01" class="form-control" id="transaction-amount" placeholder="0.00" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="transaction-category">Category</label>
-                    <select class="form-control" id="transaction-category" required>
-                    </select>
+                    <select class="form-control" id="transaction-category" required></select>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="transaction-description">Description</label>
-                    <input type="text" class="form-control" id="transaction-description"
-                        placeholder="Transaction description" required>
+                    <input type="text" class="form-control" id="transaction-description" placeholder="Transaction description" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="transaction-date">Date</label>
                     <input type="date" class="form-control" id="transaction-date" required>
                 </div>
                 <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 8px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                         <input type="checkbox" id="transaction-recurring" onchange="toggleRecurringOptions()">
                         Make Recurring
                     </label>
@@ -895,9 +838,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="goal-modal-title">Add Goal</h3>
-                <button class="modal-close" onclick="hideGoalModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="hideGoalModal()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="goal-form" class="modal-body">
                 <div class="form-group">
@@ -934,9 +875,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Add Holding</h3>
-                <button class="modal-close" onclick="hideAddHoldingModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="hideAddHoldingModal()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="holding-form" class="modal-body">
                 <div class="form-group">
@@ -951,28 +890,21 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="holding-quantity">Quantity</label>
-                    <input type="number" step="0.000001" class="form-control" id="holding-quantity" placeholder="0.00"
-                        required>
+                    <input type="number" step="0.000001" class="form-control" id="holding-quantity" placeholder="0.00" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="holding-buy-price">Buy Price per unit</label>
-                    <input type="number" step="0.01" class="form-control" id="holding-buy-price" placeholder="0.00"
-                        required>
+                    <input type="number" step="0.01" class="form-control" id="holding-buy-price" placeholder="0.00" required>
                 </div>
                 <button type="submit" class="btn btn--primary btn--full-width">Save Holding</button>
             </form>
         </div>
     </div>
 
-
-    <!-- Configure the backend URL. Replace with your Render URL before deploying. -->
     <script>
-        // Set this to your Render backend URL in production, e.g.:
-        // window.FINANCEHUB_API_URL = 'https://financehub-api.onrender.com';
         window.FINANCEHUB_API_URL = 'https://financehub-xczy.onrender.com';
     </script>
     <script src="api.js"></script>
     <script src="app.js"></script>
 </body>
-
 </html>
