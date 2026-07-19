@@ -560,6 +560,8 @@ select.form-control {
   padding: var(--sp-12) 0 var(--sp-16);
   position: relative;
   z-index: 2;
+  perspective: 1200px;
+  overflow: hidden;
 }
 .hero-content {
   display: grid;
@@ -635,6 +637,8 @@ select.form-control {
   display: flex;
   justify-content: center;
   align-items: center;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dashboard-preview {
   background: var(--glass-bg-strong);
@@ -1630,6 +1634,8 @@ select.form-control {
   gap: var(--sp-5);
 }
 .product-card {
+  position: relative;
+  overflow: hidden;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--r-lg);
@@ -1639,7 +1645,6 @@ select.form-control {
   transition: all var(--dur-normal) var(--ease);
 }
 .product-card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: var(--accent-teal-400);
 }
@@ -1754,12 +1759,15 @@ select.form-control {
   gap: var(--sp-5);
 }
 .trust-stat {
+  position: relative;
+  overflow: hidden;
   text-align: center;
   padding: var(--sp-6) var(--sp-4);
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--r-lg);
   backdrop-filter: var(--glass-blur);
+  transition: all var(--dur-normal) var(--ease);
 }
 .trust-stat-icon {
   width: 48px;
@@ -1794,6 +1802,8 @@ select.form-control {
   gap: var(--sp-6);
 }
 .testimonial-card {
+  position: relative;
+  overflow: hidden;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--r-lg);
@@ -1802,7 +1812,6 @@ select.form-control {
   transition: all var(--dur-normal) var(--ease);
 }
 .testimonial-card:hover {
-  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
 .testimonial-stars {
@@ -2181,6 +2190,215 @@ select.form-control {
   outline: 2px solid var(--accent-teal-400);
   outline-offset: -2px;
   border-radius: var(--r-md);
+}
+
+/* ── Modal Header / Close (non-auth modals) ──────────────────────────── */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+}
+.modal-header i { color: var(--color-primary); font-size: var(--fs-xl); }
+.modal-close {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-md);
+  cursor: pointer;
+  padding: var(--sp-1);
+  border-radius: var(--r-sm);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--dur-fast) var(--ease);
+}
+.modal-close:hover {
+  background: var(--color-surface-overlay);
+  color: var(--color-text-primary);
+}
+.modal-body { padding: var(--sp-5); }
+.modal-footer {
+  padding: var(--sp-4) var(--sp-5);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Scroll Reveal Animations ────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal.reveal--left {
+  transform: translateX(-60px);
+}
+.reveal.reveal--left.revealed {
+  transform: translateX(0);
+}
+.reveal.reveal--right {
+  transform: translateX(60px);
+}
+.reveal.reveal--right.revealed {
+  transform: translateX(0);
+}
+.reveal.reveal--scale {
+  transform: scale(0.9);
+}
+.reveal.reveal--scale.revealed {
+  transform: scale(1);
+}
+.reveal.reveal--rotate {
+  transform: perspective(800px) rotateY(-8deg) translateX(-30px);
+}
+.reveal.reveal--rotate.revealed {
+  transform: perspective(800px) rotateY(0deg) translateX(0);
+}
+
+/* Staggered children reveal */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.revealed > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger.revealed > *:nth-child(2) { transition-delay: 0.12s; }
+.reveal-stagger.revealed > *:nth-child(3) { transition-delay: 0.19s; }
+.reveal-stagger.revealed > *:nth-child(4) { transition-delay: 0.26s; }
+.reveal-stagger.revealed > *:nth-child(5) { transition-delay: 0.33s; }
+.reveal-stagger.revealed > *:nth-child(6) { transition-delay: 0.40s; }
+.reveal-stagger.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── 3D Card Tilt ────────────────────────────────────────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.tilt-card:hover {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(45, 212, 191, 0.1);
+}
+.tilt-card .tilt-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.tilt-card:hover .tilt-shine { opacity: 1; }
+
+/* ── 3D Hero Depth ───────────────────────────────────────────────────── */
+.hero-3d-wrapper {
+  perspective: 1200px;
+}
+.hero-3d-card {
+  transform-style: preserve-3d;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Parallax depth layers ───────────────────────────────────────────── */
+.parallax-layer {
+  transition: transform 0.15s ease-out;
+  will-change: transform;
+}
+.parallax-layer[data-speed="0.2"] { --parallax-speed: 0.2; }
+.parallax-layer[data-speed="0.4"] { --parallax-speed: 0.4; }
+.parallax-layer[data-speed="0.6"] { --parallax-speed: 0.6; }
+.parallax-layer[data-speed="0.8"] { --parallax-speed: 0.8; }
+
+/* ── Page entrance animation ─────────────────────────────────────────── */
+@keyframes pageEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.landing-page { animation: pageEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ── Hero floating animation ─────────────────────────────────────────── */
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(1deg); }
+  66% { transform: translateY(-6px) rotate(-0.5deg); }
+}
+.hero-visual {
+  animation: heroFloat 6s ease-in-out infinite;
+}
+
+/* ── Counter animation ───────────────────────────────────────────────── */
+@keyframes countPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.stat-value.counting {
+  animation: countPulse 0.3s ease-in-out;
+}
+
+/* ── Glow pulse on CTA buttons ───────────────────────────────────────── */
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(45, 212, 191, 0.15); }
+}
+.hero-actions .btn--primary {
+  animation: ctaGlow 3s ease-in-out infinite;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal--left, .reveal--right, .reveal--scale, .reveal--rotate {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tilt-card {
+    transform: none !important;
+    transition: none;
+  }
+  .tilt-card .tilt-shine { display: none; }
+  .hero-visual { animation: none; }
+  .auth-icon { animation: none; }
+  .auth-particle { animation: none; opacity: 0.2; }
+  .hero-actions .btn--primary { animation: none; }
+  .landing-page { animation: none; opacity: 1; }
 }
 
 /* ── Responsive: Desktop XL (1440px+) ───────────────────────────────── */

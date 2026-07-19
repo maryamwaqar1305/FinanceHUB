@@ -714,6 +714,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeTheme();
     initializeApp();
     setupEventListeners();
+    initScrollReveal();
+    initTiltCards();
+    initHeroDepth();
+    initParallaxScroll();
+    initCountUp();
 });
 
 // Theme Management
@@ -2427,3 +2432,140 @@ function debounce(fn, delay) {
         timer = setTimeout(() => fn.apply(this, args), delay);
     };
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCROLL REVEAL — IntersectionObserver for all .reveal elements
+   ══════════════════════════════════════════════════════════════════════════ */
+function initScrollReveal() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const revealElements = document.querySelectorAll('.reveal, .reveal-stagger');
+    if (!revealElements.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => observer.observe(el));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   3D TILT CARD — Mouse-tracking perspective transform on .tilt-card
+   ══════════════════════════════════════════════════════════════════════════ */
+function initTiltCards() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('ontouchstart' in window) return; // skip on touch devices
+
+    const tiltCards = document.querySelectorAll('.tilt-card');
+
+    tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+
+            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+
+            // Update shine gradient position
+            const shine = card.querySelector('.tilt-shine');
+            if (shine) {
+                shine.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+                shine.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+    });
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO 3D DEPTH — Parallax mouse movement on the hero visual
+   ══════════════════════════════════════════════════════════════════════════ */
+function initHeroDepth() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('ontouchstart' in window) return;
+
+    const heroSection = document.querySelector('.landing-hero');
+    const heroVisual = document.querySelector('.hero-visual');
+    if (!heroSection || !heroVisual) return;
+
+    heroSection.addEventListener('mousemove', (e) => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+        heroVisual.style.transform = `
+            translateX(${x * 20}px)
+            translateY(${y * 15}px)
+            rotateY(${x * 5}deg)
+            rotateX(${-y * 5}deg)
+        `;
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+        heroVisual.style.transform = 'translateX(0) translateY(0) rotateY(0deg) rotateX(0deg)';
+    });
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PARALLAX SCROLL — Subtle depth on scroll for landing sections
+   ══════════════════════════════════════════════════════════════════════════ */
+function initParallaxScroll() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const heroVisual = document.querySelector('.hero-visual');
+    if (!heroVisual) return;
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const speed = 0.15;
+                heroVisual.style.transform = `translateY(${scrollY * speed}px)`;
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TRUST STAT COUNTER — Animate numbers counting up on scroll
+   ══════════════════════════════════════════════════════════════════════════ */
+function initCountUp() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const statValues = document.querySelectorAll('.trust-stat-value');
+    if (!statValues.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('counting');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    statValues.forEach(el => observer.observe(el));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INITIALIZE ALL 3D & SCROLL EFFECTS — Called from main DOMContentLoaded
+   ══════════════════════════════════════════════════════════════════════════ */
