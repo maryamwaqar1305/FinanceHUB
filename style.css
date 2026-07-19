@@ -638,7 +638,6 @@ select.form-control {
   justify-content: center;
   align-items: center;
   transform-style: preserve-3d;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .dashboard-preview {
   background: var(--glass-bg-strong);
@@ -1385,6 +1384,258 @@ select.form-control {
   justify-content: flex-end;
   margin-top: var(--sp-5);
 }
+
+/* ── Auth Modal 3D Glass Card ──────────────────────────────────────── */
+.auth-modal-content {
+  max-width: 480px;
+  background: rgba(15, 20, 32, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-xl);
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(45, 212, 191, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transform: translateY(32px) rotateX(6deg) rotateY(-2deg) scale(0.93);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  perspective: 1200px;
+}
+.modal:not(.hidden) .auth-modal-content {
+  transform: translateY(0) rotateX(0deg) rotateY(0deg) scale(1);
+}
+.auth-modal-content:hover {
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.15),
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(45, 212, 191, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Auth modal gradient backdrop */
+.login-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 60%, rgba(45, 212, 191, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 30%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 80%, rgba(167, 139, 250, 0.08) 0%, transparent 60%);
+  animation: authBackdropPulse 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes authBackdropPulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* Floating particles */
+.auth-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  z-index: 1;
+}
+.auth-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent-teal-400);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: particleFloat 6s ease-in-out infinite;
+}
+.auth-particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 7s; }
+.auth-particle:nth-child(2) { left: 80%; top: 15%; animation-delay: 1s; animation-duration: 5s; background: var(--accent-sky-400); }
+.auth-particle:nth-child(3) { left: 50%; top: 80%; animation-delay: 2s; animation-duration: 8s; background: var(--accent-violet-400); }
+.auth-particle:nth-child(4) { left: 25%; top: 70%; animation-delay: 3s; animation-duration: 6s; }
+.auth-particle:nth-child(5) { left: 70%; top: 60%; animation-delay: 0.5s; animation-duration: 7s; background: var(--cta-gold); }
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+  25% { transform: translateY(-20px) translateX(10px) scale(1.5); opacity: 0.6; }
+  50% { transform: translateY(-10px) translateX(-8px) scale(1); opacity: 0.2; }
+  75% { transform: translateY(-25px) translateX(5px) scale(1.3); opacity: 0.5; }
+}
+
+/* Auth header */
+.auth-modal-header {
+  padding: var(--sp-8) var(--sp-8) var(--sp-4);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.auth-modal-header .auth-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-teal-500), var(--accent-teal-400));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-2xl);
+  color: var(--surface-000);
+  margin: 0 auto var(--sp-5);
+  box-shadow: 0 4px 20px rgba(45, 212, 191, 0.3);
+  animation: authIconFloat 3s ease-in-out infinite;
+}
+@keyframes authIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.auth-modal-header h3 {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+.auth-modal-header p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Auth form body */
+.auth-modal-body {
+  padding: var(--sp-5) var(--sp-8) var(--sp-8);
+  position: relative;
+  z-index: 2;
+}
+.auth-modal-body .form-group {
+  margin-bottom: var(--sp-4);
+}
+.auth-modal-body .form-label {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  margin-bottom: var(--sp-2);
+  display: block;
+}
+.auth-modal-body .form-control {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  transition: all var(--dur-fast) var(--ease);
+  width: 100%;
+}
+.auth-modal-body .form-control:focus {
+  border-color: var(--accent-teal-400);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.15);
+  outline: none;
+}
+.auth-modal-body .form-control::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Auth button with shine sweep */
+.auth-modal-body .btn--primary {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-5);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--r-md);
+  margin-top: var(--sp-2);
+  position: relative;
+  overflow: hidden;
+}
+.auth-modal-body .btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+.auth-modal-body .btn--primary:hover::after {
+  transform: translateX(100%);
+}
+
+/* Password input in auth */
+.auth-modal-body .password-input {
+  position: relative;
+}
+.auth-modal-body .password-input .form-control {
+  padding-right: 44px;
+}
+.auth-modal-body .password-toggle {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+.auth-modal-body .password-toggle:hover { color: var(--color-text-primary); }
+
+/* Password strength requirements */
+.auth-modal-body .password-requirements {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+}
+.auth-modal-body .requirement {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.auth-modal-body .requirement.valid { color: var(--accent-emerald-400); }
+.auth-modal-body .requirement i { font-size: 9px; }
+
+/* Forgot password link */
+.auth-modal-body .forgot-password {
+  text-align: right;
+  margin-top: var(--sp-2);
+}
+.auth-modal-body .forgot-password .btn--ghost {
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  padding: 0;
+  background: none;
+  border: none;
+}
+.auth-modal-body .forgot-password .btn--ghost:hover { color: var(--accent-teal-400); }
+
+/* Error message in auth */
+.auth-modal-body .error-message {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  color: var(--color-danger);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-3);
+}
+
+/* Auth footer */
+.auth-modal-footer {
+  padding: var(--sp-4) var(--sp-8) var(--sp-6);
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 2;
+}
+.auth-modal-footer p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+.auth-modal-footer a {
+  color: var(--accent-teal-400);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+}
+.auth-modal-footer a:hover { text-decoration: underline; }
 
 .profile-modal { max-width: 480px; }
 .profile-picture-section {
@@ -2192,47 +2443,6 @@ select.form-control {
   border-radius: var(--r-md);
 }
 
-/* ── Modal Header / Close (non-auth modals) ──────────────────────────── */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--sp-5);
-  border-bottom: 1px solid var(--color-border);
-}
-.modal-header h3 {
-  margin: 0;
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold);
-  color: var(--color-text-primary);
-}
-.modal-header i { color: var(--color-primary); font-size: var(--fs-xl); }
-.modal-close {
-  background: var(--color-surface-raised);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
-  font-size: var(--fs-md);
-  cursor: pointer;
-  padding: var(--sp-1);
-  border-radius: var(--r-sm);
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--dur-fast) var(--ease);
-}
-.modal-close:hover {
-  background: var(--color-surface-overlay);
-  color: var(--color-text-primary);
-}
-.modal-body { padding: var(--sp-5); }
-.modal-footer {
-  padding: var(--sp-4) var(--sp-5);
-  text-align: center;
-  border-top: 1px solid var(--color-border);
-}
-
 /* ── Scroll Reveal Animations ────────────────────────────────────────── */
 .reveal {
   opacity: 0;
@@ -2290,7 +2500,7 @@ select.form-control {
 /* ── 3D Card Tilt ────────────────────────────────────────────────────── */
 .tilt-card {
   transform-style: preserve-3d;
-  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  transform: perspective(800px) rotateX(0deg) rotateY(0deg);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
@@ -2346,7 +2556,7 @@ select.form-control {
     transform: translateY(0);
   }
 }
-.landing-page { animation: pageEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+#landing-page { animation: pageEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* ── Hero floating animation ─────────────────────────────────────────── */
 @keyframes heroFloat {
@@ -2398,7 +2608,7 @@ select.form-control {
   .auth-icon { animation: none; }
   .auth-particle { animation: none; opacity: 0.2; }
   .hero-actions .btn--primary { animation: none; }
-  .landing-page { animation: none; opacity: 1; }
+  #landing-page { animation: none; opacity: 1; }
 }
 
 /* ── Responsive: Desktop XL (1440px+) ───────────────────────────────── */

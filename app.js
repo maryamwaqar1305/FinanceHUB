@@ -717,7 +717,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollReveal();
     initTiltCards();
     initHeroDepth();
-    initParallaxScroll();
     initCountUp();
 });
 
@@ -2488,13 +2487,13 @@ function initTiltCards() {
         });
 
         card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            card.style.transform = '';
         });
     });
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO 3D DEPTH — Parallax mouse movement on the hero visual
+   HERO 3D DEPTH — Mouse parallax on the hero visual (unified handler)
    ══════════════════════════════════════════════════════════════════════════ */
 function initHeroDepth() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -2518,31 +2517,8 @@ function initHeroDepth() {
     });
 
     heroSection.addEventListener('mouseleave', () => {
-        heroVisual.style.transform = 'translateX(0) translateY(0) rotateY(0deg) rotateX(0deg)';
+        heroVisual.style.transform = '';
     });
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   PARALLAX SCROLL — Subtle depth on scroll for landing sections
-   ══════════════════════════════════════════════════════════════════════════ */
-function initParallaxScroll() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const heroVisual = document.querySelector('.hero-visual');
-    if (!heroVisual) return;
-
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                const speed = 0.15;
-                heroVisual.style.transform = `translateY(${scrollY * speed}px)`;
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
