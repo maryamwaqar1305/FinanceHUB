@@ -285,7 +285,7 @@ This project is developed and maintained by **Maryam Waqar**. For suggestions, b
 ---
 
 <div align="center">
-  <sub>Built with ❤️ for sustainable finance · <strong>FinanceHub v2.0</strong> · © 2027</sub>
+  <sub>Built for sustainable finance · <strong>FinanceHub v2.0</strong> · © 2027</sub>
   <br>
   <sub>
     <a href="https://github.com/maryamwaqar1305/FinanceHUB">GitHub</a> ·
