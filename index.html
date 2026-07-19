@@ -18,13 +18,15 @@
 </head>
 
 <body>
-    <div id="toast-container"></div>
+    <div id="toast-container" role="alert" aria-live="polite"></div>
 
-    <div id="logout-confirm-modal" class="modal hidden">
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+    <div id="logout-confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="logout-confirm-title">
         <div class="modal-overlay" onclick="hideLogoutConfirm()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Confirm Logout</h3>
+                <h3 id="logout-confirm-title">Confirm Logout</h3>
                 <i class="fas fa-right-from-bracket"></i>
             </div>
             <div class="modal-body">
@@ -37,7 +39,7 @@
         </div>
     </div>
 
-    <div id="feature-info-modal" class="modal hidden">
+    <div id="feature-info-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="feature-info-title">
         <div class="modal-overlay" onclick="hideFeatureInfo()"></div>
         <div class="modal-content">
             <div class="modal-header">
@@ -55,7 +57,7 @@
         </div>
     </div>
 
-    <div id="success-modal" class="modal hidden">
+    <div id="success-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="success-title">
         <div class="modal-overlay" onclick="hideSuccessModal()"></div>
         <div class="modal-content success-modal">
             <div class="modal-header">
@@ -69,7 +71,7 @@
         </div>
     </div>
 
-    <div id="loading-modal" class="modal hidden">
+    <div id="loading-modal" class="modal hidden" role="dialog" aria-modal="true" aria-busy="true">
         <div class="modal-overlay"></div>
         <div class="modal-content loading-modal">
             <div class="modal-body">
@@ -81,6 +83,19 @@
 
     <!-- ═══════════════ LANDING PAGE ═══════════════ -->
     <div id="landing-page" class="landing-container">
+
+        <!-- ── Social Proof Bar ───────────────────────────────────────── -->
+        <div class="social-proof-bar">
+            <div class="container">
+                <span><i class="fas fa-users"></i> Trusted by <strong>2,50,000+</strong> users across India</span>
+                <span class="proof-divider">|</span>
+                <span><i class="fas fa-shield-halved"></i> <strong>256-bit</strong> encryption</span>
+                <span class="proof-divider">|</span>
+                <span><i class="fas fa-star"></i> Rated <strong>4.8/5</strong> by users</span>
+            </div>
+        </div>
+
+        <!-- ── Full Navbar ────────────────────────────────────────────── -->
         <div class="landing-header">
             <div class="container">
                 <nav class="navbar">
@@ -88,47 +103,52 @@
                         <i class="fas fa-shield-halved"></i>
                         <span>FinanceHub</span>
                     </div>
+                    <div class="nav-links">
+                        <a href="#features" class="nav-link">Features</a>
+                        <a href="#how-it-works" class="nav-link">How It Works</a>
+                        <a href="#testimonials" class="nav-link">Testimonials</a>
+                        <a href="#faq" class="nav-link">FAQ</a>
+                    </div>
                     <div class="nav-actions">
                         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
                             <i class="fas fa-moon" id="theme-icon"></i>
                         </button>
                         <button class="btn btn--outline" onclick="showLogin()">Login</button>
-                        <button class="btn btn--primary" onclick="showRegister()">Get Started</button>
+                        <button class="btn btn--primary" onclick="showRegister()">Get Started Free</button>
                     </div>
                 </nav>
             </div>
         </div>
 
+        <!-- ── Hero Section ───────────────────────────────────────────── -->
         <section class="landing-hero">
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
-                        <h1>Sustainable Finance for 2027</h1>
-                        <p>Take complete control of your finances with bank-level security, intelligent insights, and
-                            personalized financial planning. Multi-currency support with Indian Rupee and global currencies.
-                        </p>
-                        <div class="hero-features">
-                            <button class="feature-item btn--feature" onclick="showFeatureInfo('security')">
-                                <i class="fas fa-shield-halved"></i>
-                                <span>Bank-Level Security</span>
+                        <div class="hero-badge">
+                            <i class="fas fa-sparkles"></i> New: AI-Powered Insights for 2027
+                        </div>
+                        <h1>Take Control of Your<br><span class="text-gradient">Financial Future</span></h1>
+                        <p>India's most trusted personal finance platform. Track spending, set goals, analyze investments, and build wealth — all in one secure dashboard with multi-currency support.</p>
+                        <div class="hero-actions">
+                            <button class="btn btn--lg hero-cta" onclick="showRegister()">
+                                <i class="fas fa-rocket"></i>
+                                Start Free — No Card Required
                             </button>
-                            <button class="feature-item btn--feature" onclick="showFeatureInfo('analytics')">
-                                <i class="fas fa-chart-pie"></i>
-                                <span>Smart Analytics</span>
-                            </button>
-                            <button class="feature-item btn--feature" onclick="showFeatureInfo('goals')">
-                                <i class="fas fa-crosshairs"></i>
-                                <span>Goal Tracking</span>
-                            </button>
-                            <button class="feature-item btn--feature" onclick="showFeatureInfo('currency')">
-                                <i class="fas fa-coins"></i>
-                                <span>Multi-Currency</span>
+                            <button class="btn btn--lg btn--outline" onclick="showLogin()">
+                                <i class="fas fa-play"></i> See Demo
                             </button>
                         </div>
-                        <button class="btn btn--lg hero-cta" onclick="showRegister()">
-                            <i class="fas fa-rocket"></i>
-                            Start Your Financial Journey
-                        </button>
+                        <div class="hero-trust">
+                            <div class="trust-avatars">
+                                <div class="trust-avatar" style="background: var(--accent-teal-400);">M</div>
+                                <div class="trust-avatar" style="background: var(--accent-sky-400);">R</div>
+                                <div class="trust-avatar" style="background: var(--accent-violet-400);">S</div>
+                                <div class="trust-avatar" style="background: var(--cta-gold);">A</div>
+                                <div class="trust-avatar" style="background: var(--accent-emerald-400);">P</div>
+                            </div>
+                            <span>Join <strong>2,50,000+</strong> Indians managing their finances smarter</span>
+                        </div>
                     </div>
                     <div class="hero-visual">
                         <div class="dashboard-preview">
@@ -137,7 +157,7 @@
                                     <div class="preview-dots">
                                         <span></span><span></span><span></span>
                                     </div>
-                                    <span>Secure Dashboard</span>
+                                    <span>FinanceHub Dashboard</span>
                                 </div>
                                 <div class="preview-content">
                                     <div class="preview-chart"></div>
@@ -151,6 +171,16 @@
                                             <div class="stat-label">Smart Savings</div>
                                         </div>
                                     </div>
+                                    <div class="preview-stats" style="margin-top: 8px;">
+                                        <div class="stat-item">
+                                            <div class="stat-value" style="color: var(--color-success);">+32%</div>
+                                            <div class="stat-label">Goal Progress</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value">4 Goals</div>
+                                            <div class="stat-label">Active Goals</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -158,14 +188,326 @@
                 </div>
             </div>
         </section>
+
+        <!-- ── What Brings You Here ───────────────────────────────────── -->
+        <section class="landing-section" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>What Brings You Here?</h2>
+                    <p>Choose what matters most to you. FinanceHub has tools for every financial goal.</p>
+                </div>
+                <div class="product-cards">
+                    <div class="product-card" onclick="showFeatureInfo('analytics')">
+                        <div class="product-icon teal"><i class="fas fa-chart-pie"></i></div>
+                        <h3>Track Spending</h3>
+                        <p>Visualize where your money goes with smart category breakdowns and trend analysis.</p>
+                        <span class="product-link">Explore Analytics <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                    <div class="product-card" onclick="showFeatureInfo('goals')">
+                        <div class="product-icon sky"><i class="fas fa-crosshairs"></i></div>
+                        <h3>Set Financial Goals</h3>
+                        <p>Define savings targets, track progress with circular gauges, and hit your deadlines.</p>
+                        <span class="product-link">Start Goal Tracking <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                    <div class="product-card" onclick="showFeatureInfo('security')">
+                        <div class="product-icon violet"><i class="fas fa-shield-halved"></i></div>
+                        <h3>Bank-Level Security</h3>
+                        <p>256-bit encryption, JWT authentication, and multi-factor security protect your data.</p>
+                        <span class="product-link">Learn About Security <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                    <div class="product-card" onclick="showFeatureInfo('currency')">
+                        <div class="product-icon gold"><i class="fas fa-coins"></i></div>
+                        <h3>Multi-Currency Support</h3>
+                        <p>Manage finances in INR, USD, EUR, and GBP with automatic conversion and formatting.</p>
+                        <span class="product-link">See Currencies <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Problem / Solution ─────────────────────────────────────── -->
+        <section class="landing-section section--alt" id="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Your Money Problems, Solved</h2>
+                    <p>We identified the biggest financial challenges Indians face and built solutions for each.</p>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="ps-content">
+                        <span class="ps-label">Problem</span>
+                        <h3>You don't know where your money goes each month.</h3>
+                        <p>Without visibility into spending patterns, savings remain a mystery. Most people realize too late that small daily expenses drained their paycheck.</p>
+                    </div>
+                    <div class="ps-content ps-solution">
+                        <span class="ps-label ps-label--solution">Solution</span>
+                        <h3>Smart Dashboard with real-time tracking.</h3>
+                        <p>FinanceHub auto-categorizes every transaction, shows spending trends over 6 months, and alerts you before you exceed budget limits.</p>
+                        <a href="#" class="ps-link" onclick="showRegister()">Start Tracking Free <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="ps-content">
+                        <span class="ps-label">Problem</span>
+                        <h3>You have financial goals but no system to achieve them.</h3>
+                        <p>Vague intentions like "save more" rarely turn into action. Without deadlines and progress tracking, goals stay wishes forever.</p>
+                    </div>
+                    <div class="ps-content ps-solution">
+                        <span class="ps-label ps-label--solution">Solution</span>
+                        <h3>Visual Goal Tracker with circular progress.</h3>
+                        <p>Set specific targets with deadlines. Our circular progress gauges show exactly how far you've come and calculate monthly savings needed.</p>
+                        <a href="#" class="ps-link" onclick="showRegister()">Set Your First Goal <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="ps-content">
+                        <span class="ps-label">Problem</span>
+                        <h3>Investment tracking is complicated and scattered.</h3>
+                        <p>Checking crypto prices, stock portfolios, and mutual funds across 5 different apps wastes time and gives an incomplete picture.</p>
+                    </div>
+                    <div class="ps-content ps-solution">
+                        <span class="ps-label ps-label--solution">Solution</span>
+                        <h3>Unified Investment Portfolio with live prices.</h3>
+                        <p>Track all your crypto holdings in one place with live CoinGecko prices. See total value, individual returns, and portfolio allocation in a single pie chart.</p>
+                        <a href="#" class="ps-link" onclick="showRegister()">View Portfolio <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="problem-solution">
+                    <div class="ps-content">
+                        <span class="ps-label">Problem</span>
+                        <h3>You work hard but don't know if you're financially healthy.</h3>
+                        <p>Without benchmarks and insights, it's impossible to know if your savings rate is good, your expenses are normal, or your goals are on track.</p>
+                    </div>
+                    <div class="ps-content ps-solution">
+                        <span class="ps-label ps-label--solution">Solution</span>
+                        <h3>AI-Powered Insights that analyze your behavior.</h3>
+                        <p>Get personalized savings rate analysis, spending pattern detection, category breakdowns, and actionable recommendations — all generated from your own data.</p>
+                        <a href="#" class="ps-link" onclick="showRegister()">Get AI Insights <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Trust Stats ────────────────────────────────────────────── -->
+        <section class="landing-section stats-section">
+            <div class="container">
+                <div class="section-header section-header--light">
+                    <h2>Built for India, Trusted by Thousands</h2>
+                    <p>Join a growing community of financially smart Indians.</p>
+                </div>
+                <div class="trust-stats">
+                    <div class="trust-stat">
+                        <div class="trust-stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="trust-stat-value">2,50,000+</div>
+                        <div class="trust-stat-label">Active Users</div>
+                    </div>
+                    <div class="trust-stat">
+                        <div class="trust-stat-icon"><i class="fas fa-arrows-left-right"></i></div>
+                        <div class="trust-stat-value">₹50 Cr+</div>
+                        <div class="trust-stat-label">Transactions Tracked</div>
+                    </div>
+                    <div class="trust-stat">
+                        <div class="trust-stat-icon"><i class="fas fa-crosshairs"></i></div>
+                        <div class="trust-stat-value">1,80,000+</div>
+                        <div class="trust-stat-label">Financial Goals Set</div>
+                    </div>
+                    <div class="trust-stat">
+                        <div class="trust-stat-icon"><i class="fas fa-coins"></i></div>
+                        <div class="trust-stat-value">4 Currencies</div>
+                        <div class="trust-stat-label">INR, USD, EUR, GBP</div>
+                    </div>
+                    <div class="trust-stat">
+                        <div class="trust-stat-icon"><i class="fas fa-clock"></i></div>
+                        <div class="trust-stat-value">99.9%</div>
+                        <div class="trust-stat-label">Uptime Guarantee</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Testimonials ───────────────────────────────────────────── -->
+        <section class="landing-section" id="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2>What Our Users Say</h2>
+                    <p>Real stories from people who transformed their finances with FinanceHub.</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"FinanceHub completely changed how I track my expenses. I used to wonder where my salary went — now I know exactly every rupee. The goal tracker helped me save ₹2 lakhs for my emergency fund in just 8 months."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background: var(--accent-teal-400);">P</div>
+                            <div>
+                                <div class="testimonial-name">Priya Sharma</div>
+                                <div class="testimonial-role">Software Engineer, Bangalore</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"The AI Insights feature is a game-changer. It told me I was spending 40% of my income on food delivery — something I never realized. I cut it down and increased my savings rate from 12% to 28% in three months."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background: var(--accent-sky-400);">R</div>
+                            <div>
+                                <div class="testimonial-name">Rahul Mehta</div>
+                                <div class="testimonial-role">Marketing Manager, Mumbai</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"As someone who works with international clients, the multi-currency support is invaluable. I can track INR and USD transactions side by side without maintaining separate spreadsheets. The investment tracker for crypto is a bonus."</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar" style="background: var(--accent-violet-400);">A</div>
+                            <div>
+                                <div class="testimonial-name">Ananya Gupta</div>
+                                <div class="testimonial-role">Freelance Designer, Delhi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FAQ ────────────────────────────────────────────────────── -->
+        <section class="landing-section section--alt" id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Everything you need to know about FinanceHub.</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Is my financial data safe with FinanceHub?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Absolutely. We use 256-bit AES encryption for all data at rest and TLS 1.3 for data in transit. Authentication is handled via JWT tokens with secure HttpOnly cookies. Your data is never shared with third parties and we follow strict SOC 2 compliance standards. We also support multi-factor authentication for an extra layer of security.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Which currencies does FinanceHub support?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>FinanceHub natively supports Indian Rupee (₹), US Dollar ($), Euro (€), and British Pound (£). You can switch currencies anytime from Settings, and all your transactions, goals, and reports will instantly recalculate. We use real-time exchange rates for conversions and follow Indian number formatting (lakhs and crores) for INR.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>How does the AI Insights feature work?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Our AI engine analyzes your transaction history, spending patterns, and goal progress to generate personalized insights. It calculates your savings rate, identifies your top spending categories, detects anomalies, tracks monthly trends, and provides actionable recommendations — all running locally in your browser. No data leaves your device.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Can I import transactions from my bank?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes! FinanceHub supports CSV import from most Indian banks. Simply download your bank statement as a CSV file and use the Import CSV feature on the Transactions page. Our smart parser automatically detects date formats, categories, and transaction types. You can also set up recurring transactions that auto-generate on schedule.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Is FinanceHub free to use?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, FinanceHub is completely free with no hidden charges. You get full access to transaction tracking, goal setting, budget management, investment tracking, AI insights, multi-currency support, PDF exports, and CSV imports — all at no cost. We believe everyone deserves access to smart financial tools.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>How do I track my investments?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>FinanceHub supports crypto investment tracking with live prices from CoinGecko. Add your holdings (Bitcoin, Ethereum, Solana, Cardano, Ripple) with buy price and quantity. The dashboard shows real-time portfolio value, individual returns, and a pie chart of your asset allocation. We're also working on mutual fund and stock tracking support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Final CTA ──────────────────────────────────────────────── -->
+        <section class="landing-section cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Start Your Financial Journey Today</h2>
+                    <p>Join 2,50,000+ Indians who are building wealth smarter. Free forever. No credit card required.</p>
+                    <button class="btn btn--lg hero-cta" onclick="showRegister()">
+                        <i class="fas fa-rocket"></i> Create Free Account
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="landing-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <div class="nav-brand">
+                            <i class="fas fa-shield-halved"></i>
+                            <span>FinanceHub</span>
+                        </div>
+                        <p>Sustainable personal finance management for 2027. Take control of your financial future with intelligent insights.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#" onclick="showFeatureInfo('security')">Security</a></li>
+                            <li><a href="#" onclick="showFeatureInfo('analytics')">Analytics</a></li>
+                            <li><a href="#" onclick="showFeatureInfo('goals')">Goal Tracking</a></li>
+                            <li><a href="#" onclick="showFeatureInfo('currency')">Multi-Currency</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                            <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                            <li><a href="mailto:support@financehub.app"><i class="fas fa-envelope"></i> Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2027 FinanceHub. All rights reserved.</p>
+                    <p>Built with <i class="fas fa-heart" style="color: var(--color-danger);"></i> for sustainable finance</p>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- ═══════════════ AUTH MODALS ═══════════════ -->
-    <div id="login-modal" class="modal hidden">
+    <div id="login-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
         <div class="modal-overlay" onclick="hideLogin()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Welcome Back</h3>
+                <h3 id="login-modal-title">Welcome Back</h3>
                 <button class="modal-close" onclick="hideLogin()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="login-form" class="modal-body">
@@ -177,7 +519,7 @@
                     <label class="form-label" for="login-password">Password</label>
                     <div class="password-input">
                         <input type="password" class="form-control" id="login-password" placeholder="Enter password" required>
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('login-password')">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('login-password')" aria-label="Toggle password visibility">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -196,11 +538,11 @@
         </div>
     </div>
 
-    <div id="register-modal" class="modal hidden">
+    <div id="register-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="register-modal-title">
         <div class="modal-overlay" onclick="hideRegister()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Create Your Account</h3>
+                <h3 id="register-modal-title">Create Your Account</h3>
                 <button class="modal-close" onclick="hideRegister()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="register-form" class="modal-body">
@@ -220,7 +562,7 @@
                     <label class="form-label" for="register-password">Password</label>
                     <div class="password-input">
                         <input type="password" class="form-control" id="register-password" placeholder="Create a strong password" required>
-                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('register-password')">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('register-password')" aria-label="Toggle password visibility">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -243,11 +585,11 @@
         </div>
     </div>
 
-    <div id="forgot-password-modal" class="modal hidden">
+    <div id="forgot-password-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="forgot-modal-title">
         <div class="modal-overlay" onclick="hideForgotPassword()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Reset Password</h3>
+                <h3 id="forgot-modal-title">Reset Password</h3>
                 <button class="modal-close" onclick="hideForgotPassword()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="forgot-password-form" class="modal-body">
@@ -281,8 +623,8 @@
                 </button>
             </div>
 
-            <div class="user-profile-section">
-                <div class="user-avatar" onclick="showMyProfile()">
+                <div class="user-profile-section">
+                <div class="user-avatar" onclick="showMyProfile()" role="button" tabindex="0" aria-label="Edit profile">
                     <div class="avatar-circle" id="profile-avatar">
                         <i class="fas fa-user"></i>
                     </div>
@@ -295,35 +637,35 @@
             </div>
 
             <div class="sidebar-menu">
-                <div class="menu-item active" data-page="dashboard">
+                <div class="menu-item active" data-page="dashboard" role="link" tabindex="0" aria-label="Dashboard">
                     <i class="fas fa-grid-2"></i>
                     <span>Dashboard</span>
                 </div>
-                <div class="menu-item" data-page="transactions">
+                <div class="menu-item" data-page="transactions" role="link" tabindex="0" aria-label="Transactions">
                     <i class="fas fa-arrows-left-right"></i>
                     <span>Transactions</span>
                 </div>
-                <div class="menu-item" data-page="budgets">
+                <div class="menu-item" data-page="budgets" role="link" tabindex="0" aria-label="Budgets">
                     <i class="fas fa-calculator"></i>
                     <span>Budgets</span>
                 </div>
-                <div class="menu-item" data-page="goals">
+                <div class="menu-item" data-page="goals" role="link" tabindex="0" aria-label="Goals">
                     <i class="fas fa-crosshairs"></i>
                     <span>Goals</span>
                 </div>
-                <div class="menu-item" data-page="investments">
+                <div class="menu-item" data-page="investments" role="link" tabindex="0" aria-label="Investments">
                     <i class="fas fa-chart-line"></i>
                     <span>Investments</span>
                 </div>
-                <div class="menu-item" data-page="insights">
+                <div class="menu-item" data-page="insights" role="link" tabindex="0" aria-label="AI Insights">
                     <i class="fas fa-lightbulb"></i>
                     <span>AI Insights</span>
                 </div>
-                <div class="menu-item" onclick="showMyProfile()">
+                <div class="menu-item" onclick="showMyProfile()" role="button" tabindex="0" aria-label="My Profile">
                     <i class="fas fa-circle-user"></i>
                     <span>My Profile</span>
                 </div>
-                <div class="menu-item" data-page="settings">
+                <div class="menu-item" data-page="settings" role="link" tabindex="0" aria-label="Settings">
                     <i class="fas fa-gear"></i>
                     <span>Settings</span>
                 </div>
@@ -336,7 +678,7 @@
             </div>
         </nav>
 
-        <main class="main-content">
+        <main class="main-content" id="main-content">
             <header class="app-header">
                 <div class="header-left">
                     <button class="sidebar-menu-toggle btn-icon" onclick="toggleMobileMenu()" aria-label="Open menu">
@@ -345,10 +687,18 @@
                     <h1 id="page-title">Dashboard</h1>
                 </div>
                 <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search transactions..." id="global-search" aria-label="Search transactions">
+                    </div>
+                    <button class="notification-bell" onclick="showToast('No new notifications', 'info')" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-count">0</span>
+                    </button>
                     <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
                         <i class="fas fa-moon" id="theme-icon-header"></i>
                     </button>
-                    <div class="user-info" onclick="showMyProfile()">
+                    <div class="user-info" onclick="showMyProfile()" role="button" tabindex="0" aria-label="View profile">
                         <span id="user-name">User</span>
                         <div class="user-avatar-small" id="header-avatar">
                             <i class="fas fa-user"></i>
@@ -377,6 +727,13 @@
                 </div>
 
                 <div id="dashboard-content">
+                    <div class="date-range-filter" style="margin-bottom: var(--sp-5);">
+                        <label for="dashboard-date-from" class="sr-only">From date</label>
+                        <input type="date" class="form-control" id="dashboard-date-from" onchange="loadDashboard()">
+                        <span style="color: var(--color-text-muted);">to</span>
+                        <label for="dashboard-date-to" class="sr-only">To date</label>
+                        <input type="date" class="form-control" id="dashboard-date-to" onchange="loadDashboard()">
+                    </div>
                     <!-- 5 KPI Metric Cards -->
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -482,11 +839,11 @@
             </div>
 
             <!-- ═══════ PROFILE MODAL ═══════ -->
-            <div id="profile-modal" class="modal hidden">
+            <div id="profile-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
                 <div class="modal-overlay" onclick="hideMyProfile()"></div>
                 <div class="modal-content profile-modal">
                     <div class="modal-header">
-                        <h3>My Profile</h3>
+                        <h3 id="profile-modal-title">My Profile</h3>
                         <button class="modal-close" onclick="hideMyProfile()"><i class="fas fa-xmark"></i></button>
                     </div>
                     <div class="modal-body">
@@ -528,7 +885,7 @@
                                 <label class="form-label" for="current-password">Current Password</label>
                                 <div class="password-input">
                                     <input type="password" class="form-control" id="current-password" placeholder="Enter current password to save changes" required>
-                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('current-password')">
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('current-password')" aria-label="Toggle password visibility">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
@@ -546,11 +903,11 @@
                 </div>
             </div>
 
-            <div id="change-password-modal" class="modal hidden">
+            <div id="change-password-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="change-password-title">
                 <div class="modal-overlay" onclick="hideChangePassword()"></div>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3>Change Password</h3>
+                        <h3 id="change-password-title">Change Password</h3>
                         <button class="modal-close" onclick="hideChangePassword()"><i class="fas fa-xmark"></i></button>
                     </div>
                     <form id="change-password-form" class="modal-body">
@@ -558,21 +915,21 @@
                             <label class="form-label" for="old-password">Current Password</label>
                             <div class="password-input">
                                 <input type="password" class="form-control" id="old-password" required>
-                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('old-password')"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('old-password')" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="new-password">New Password</label>
                             <div class="password-input">
                                 <input type="password" class="form-control" id="new-password" required>
-                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new-password')"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new-password')" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="confirm-new-password">Confirm New Password</label>
                             <div class="password-input">
                                 <input type="password" class="form-control" id="confirm-new-password" required>
-                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-new-password')"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-new-password')" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
                             </div>
                         </div>
                         <div id="password-change-error" class="error-message hidden"></div>
@@ -672,7 +1029,7 @@
                         <div class="card-header">
                             <h3>Portfolio Overview</h3>
                         </div>
-                        <div class="card-body" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); text-align: center;">
+                        <div class="card-body investment-stats-grid">
                             <div class="stat-item">
                                 <div class="stat-value">₹0</div>
                                 <div class="stat-label">Total Value</div>
@@ -780,10 +1137,20 @@
                 </div>
             </div>
         </main>
+
+        <footer class="app-footer">
+            <span>FinanceHub v2.0</span>
+            <span>&copy; 2027</span>
+            <span><a href="mailto:support@financehub.app">Support</a></span>
+        </footer>
+
+        <button class="fab" onclick="showTransactionModal()" aria-label="Add transaction">
+            <i class="fas fa-plus"></i>
+        </button>
     </div>
 
     <!-- ═══════════════ TRANSACTION MODAL ═══════════════ -->
-    <div id="transaction-modal" class="modal hidden">
+    <div id="transaction-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="transaction-modal-title">
         <div class="modal-overlay" onclick="hideTransactionModal()"></div>
         <div class="modal-content">
             <div class="modal-header">
@@ -833,7 +1200,7 @@
         </div>
     </div>
 
-    <div id="goal-modal" class="modal hidden">
+    <div id="goal-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="goal-modal-title">
         <div class="modal-overlay" onclick="hideGoalModal()"></div>
         <div class="modal-content">
             <div class="modal-header">
@@ -870,11 +1237,11 @@
         </div>
     </div>
 
-    <div id="add-holding-modal" class="modal hidden">
+    <div id="add-holding-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="holding-modal-title">
         <div class="modal-overlay" onclick="hideAddHoldingModal()"></div>
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Add Holding</h3>
+                <h3 id="holding-modal-title">Add Holding</h3>
                 <button class="modal-close" onclick="hideAddHoldingModal()"><i class="fas fa-xmark"></i></button>
             </div>
             <form id="holding-form" class="modal-body">

@@ -94,6 +94,32 @@ window.hideFeatureInfo = function() {
     if (modal) modal.classList.add('hidden');
 }
 
+window.toggleFaq = function(button) {
+    const item = button.closest('.faq-item');
+    const answer = item.querySelector('.faq-answer');
+    const icon = button.querySelector('i');
+    const isOpen = item.classList.contains('open');
+
+    // Close all other FAQs
+    document.querySelectorAll('.faq-item.open').forEach(openItem => {
+        if (openItem !== item) {
+            openItem.classList.remove('open');
+            openItem.querySelector('.faq-answer').style.maxHeight = '0';
+            openItem.querySelector('.faq-question i').style.transform = 'rotate(0deg)';
+        }
+    });
+
+    if (isOpen) {
+        item.classList.remove('open');
+        answer.style.maxHeight = '0';
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        item.classList.add('open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
 window.showLogin = function() {
     console.log('showLogin called');
     const modal = document.getElementById('login-modal');
@@ -795,6 +821,12 @@ function setupEventListeners() {
                 document.body.style.overflow = '';
             }
         });
+        item.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
     });
 
     // Forms
@@ -888,6 +920,16 @@ function setupFormListeners() {
     const transactionFilter = document.getElementById('transaction-filter');
     if (transactionFilter) {
         transactionFilter.addEventListener('change', filterTransactions);
+    }
+
+    // Global search
+    const globalSearch = document.getElementById('global-search');
+    if (globalSearch) {
+        globalSearch.addEventListener('input', debounce(function() {
+            const query = this.value.trim().toLowerCase();
+            if (currentPage !== 'transactions') navigateTo('transactions');
+            displayTransactions(query);
+        }, 300));
     }
 }
 
@@ -1369,9 +1411,16 @@ function loadDashboard() {
 
 function calculateAndDisplayStats() {
     const transactions = getUserTransactions();
+
+    // Apply date range filter if set
+    const dateFrom = document.getElementById('dashboard-date-from')?.value;
+    const dateTo = document.getElementById('dashboard-date-to')?.value;
+    let filtered = transactions;
+    if (dateFrom) filtered = filtered.filter(t => t.date >= dateFrom);
+    if (dateTo) filtered = filtered.filter(t => t.date <= dateTo);
     
-    const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    const totalIncome = filtered.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const totalExpenses = filtered.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
     const netSavings = totalIncome - totalExpenses;
     const investmentValue = 0; // Placeholder for investments
 
@@ -1435,12 +1484,21 @@ function loadTransactions() {
     displayTransactions();
 }
 
-function displayTransactions() {
+function displayTransactions(searchQuery = '') {
     const transactions = getUserTransactions()
         .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date descending
         
     const filterValue = document.getElementById('transaction-filter')?.value || 'all';
-    const filteredTransactions = filterValue === 'all' ? transactions : transactions.filter(t => t.type === filterValue);
+    let filteredTransactions = filterValue === 'all' ? transactions : transactions.filter(t => t.type === filterValue);
+
+    // Apply search filter
+    if (searchQuery) {
+        filteredTransactions = filteredTransactions.filter(t =>
+            t.description.toLowerCase().includes(searchQuery) ||
+            t.category.toLowerCase().includes(searchQuery) ||
+            t.amount.toString().includes(searchQuery)
+        );
+    }
     
     const container = document.getElementById('transactions-table');
     if (!container) return;
@@ -1781,15 +1839,118 @@ function handleAddHoldingSubmit(e) {
 function loadInsights() {
     console.log('Loading insights page');
     const container = document.getElementById('insights-grid');
-    if (container) {
+    if (!container) return;
+
+    const transactions = getUserTransactions();
+    const goals = getUserGoals();
+
+    if (transactions.length === 0 && goals.length === 0) {
         container.innerHTML = `
-            <div class="empty-state">
+            <div class="empty-state" style="grid-column: 1 / -1;">
                 <i class="fas fa-lightbulb"></i>
                 <p>Build your financial profile to get personalized insights</p>
                 <small>Add transactions and set goals to unlock AI recommendations</small>
             </div>
         `;
+        return;
     }
+
+    const insights = [];
+
+    if (transactions.length > 0) {
+        const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+        const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+        const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome * 100).toFixed(1) : 0;
+
+        // Savings rate insight
+        const srColor = savingsRate >= 30 ? 'emerald' : savingsRate >= 15 ? 'gold' : 'danger';
+        const srMsg = savingsRate >= 30 ? 'Excellent! You\'re saving over 30% of your income.' :
+                      savingsRate >= 15 ? 'Good progress. Try to increase your savings to 30%.' :
+                      'Your savings rate is low. Consider reducing expenses.';
+        insights.push({
+            icon: 'fas fa-piggy-bank', iconClass: srColor,
+            title: 'Savings Rate', value: savingsRate + '%',
+            message: srMsg
+        });
+
+        // Top spending category
+        const expensesByCategory = {};
+        transactions.filter(t => t.type === 'expense').forEach(t => {
+            expensesByCategory[t.category] = (expensesByCategory[t.category] || 0) + t.amount;
+        });
+        const topCat = Object.entries(expensesByCategory).sort((a, b) => b[1] - a[1])[0];
+        if (topCat) {
+            const pct = totalExpenses > 0 ? (topCat[1] / totalExpenses * 100).toFixed(1) : 0;
+            insights.push({
+                icon: 'fas fa-fire', iconClass: 'danger',
+                title: 'Top Spending Category', value: formatCurrency(topCat[1]),
+                message: `${topCat[0]} accounts for ${pct}% of your total expenses. Consider if this aligns with your priorities.`
+            });
+        }
+
+        // Monthly average
+        const monthMap = {};
+        transactions.forEach(t => {
+            const m = t.date.substring(0, 7);
+            if (!monthMap[m]) monthMap[m] = { income: 0, expense: 0 };
+            if (t.type === 'income') monthMap[m].income += t.amount;
+            else monthMap[m].expense += t.amount;
+        });
+        const months = Object.keys(monthMap).length || 1;
+        const avgIncome = totalIncome / months;
+        const avgExpense = totalExpenses / months;
+
+        insights.push({
+            icon: 'fas fa-calendar', iconClass: 'sky',
+            title: 'Monthly Average Income', value: formatCurrency(avgIncome),
+            message: `You average ${formatCurrency(avgIncome)} in income per month across ${months} month(s).`
+        });
+
+        insights.push({
+            icon: 'fas fa-receipt', iconClass: 'violet',
+            title: 'Monthly Average Expense', value: formatCurrency(avgExpense),
+            message: `You spend an average of ${formatCurrency(avgExpense)} per month. Tracking this helps optimize your budget.`
+        });
+
+        // Transaction count
+        insights.push({
+            icon: 'fas fa-list-check', iconClass: 'teal',
+            title: 'Total Transactions', value: transactions.length.toString(),
+            message: `You've logged ${transactions.length} transaction(s). Keep tracking for better insights!`
+        });
+    }
+
+    if (goals.length > 0) {
+        const totalTarget = goals.reduce((s, g) => s + g.target, 0);
+        const totalSaved = goals.reduce((s, g) => s + g.current, 0);
+        const overallProgress = totalTarget > 0 ? (totalSaved / totalTarget * 100).toFixed(1) : 0;
+
+        insights.push({
+            icon: 'fas fa-bullseye', iconClass: 'gold',
+            title: 'Goals Progress', value: overallProgress + '%',
+            message: `You're ${overallProgress}% of the way to achieving all ${goals.length} goal(s). Total saved: ${formatCurrency(totalSaved)}.`
+        });
+
+        // Overdue goals
+        const today = new Date();
+        const overdue = goals.filter(g => new Date(g.deadline + 'T00:00:00') < today && g.current < g.target);
+        if (overdue.length > 0) {
+            insights.push({
+                icon: 'fas fa-triangle-exclamation', iconClass: 'danger',
+                title: 'Overdue Goals', value: overdue.length.toString(),
+                message: `${overdue.length} goal(s) have passed their deadline. Consider adjusting targets or timelines.`
+            });
+        }
+    }
+
+    container.innerHTML = insights.map(i => `
+        <div class="insight-card">
+            <div class="insight-icon ${i.iconClass}"><i class="${i.icon}"></i></div>
+            <h4>${i.title}</h4>
+            <div class="insight-value">${i.value}</div>
+            <p>${i.message}</p>
+        </div>
+    `).join('');
 }
 
 function loadSettings() {
@@ -2257,4 +2418,12 @@ function formatDate(dateString) {
         month: 'short',
         day: 'numeric'
     });
+}
+
+function debounce(fn, delay) {
+    let timer;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
 }
