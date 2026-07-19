@@ -384,7 +384,6 @@ window.showBudgetModal = function() {
 
 window.navigateTo = function(page) {
     console.log('navigateTo called with page:', page);
-    // Update active menu item
     document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.remove('active');
         if (item.dataset.page === page) {
@@ -392,18 +391,22 @@ window.navigateTo = function(page) {
         }
     });
 
-    // Hide all pages
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.page === page) {
+            item.classList.add('active');
+        }
+    });
+
     document.querySelectorAll('.page-content').forEach(pageEl => {
         pageEl.classList.add('hidden');
     });
 
-    // Show selected page
     const targetPage = document.getElementById(page + '-page');
     if (targetPage) {
         targetPage.classList.remove('hidden');
     }
     
-    // Update page title
     const titles = {
         dashboard: 'Dashboard',
         transactions: 'Transactions',
@@ -420,7 +423,6 @@ window.navigateTo = function(page) {
 
     currentPage = page;
 
-    // Load page-specific content
     switch(page) {
         case 'dashboard':
             loadDashboard();
@@ -498,11 +500,10 @@ window.toggleMobileMenu = function() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('mobile-overlay');
     
-    if (sidebar) sidebar.classList.toggle('mobile-open');
+    if (sidebar) sidebar.classList.toggle('sidebar--open');
     if (overlay) overlay.classList.toggle('hidden');
 
-    // Toggle body scroll lock on mobile
-    document.body.style.overflow = (sidebar && sidebar.classList.contains('mobile-open')) ? 'hidden' : '';
+    document.body.style.overflow = (sidebar && sidebar.classList.contains('sidebar--open')) ? 'hidden' : '';
 }
 
 window.savePreferences = function() {
@@ -763,40 +764,42 @@ function updateThemeIcons() {
 
 function initializeApp() {
     console.log('Initializing application');
-    // Check for existing session
+    updateGreeting();
     const savedUser = localStorage.getItem('financeapp_current_user');
     if (savedUser) {
         try {
-            // Find the correct user account using the saved email, falling back to "demo@example.com" if needed
             const sessionUser = JSON.parse(savedUser);
-            const email = sessionUser.email || "demo@example.com"; 
+            const email = sessionUser.email || "demo@example.com";
 
-            if (userAccounts[email]) {
-                // IMPORTANT: Re-link session user with actual userAccount data
-                currentUser = {
-                    email: email,
-                    profile: userAccounts[email].profile
-                };
-                
-                console.log('Valid user session found, showing main app');
-                // Load saved preferences
-                const savedCurrency = localStorage.getItem('financeapp_currency') || 'INR';
-                currentCurrency = savedCurrency;
-                
-                showMainApp();
-                return;
+            currentUser = {
+                email: email,
+                profile: sessionUser.profile || (userAccounts[email] && userAccounts[email].profile) || { firstName: "User", lastName: "", email: email }
+            };
+
+            if (sessionUser._id) {
+                currentUser._id = sessionUser._id;
             }
+
+            console.log('Valid user session found, showing main app');
+            const savedCurrency = localStorage.getItem('financeapp_currency') || 'INR';
+            currentCurrency = savedCurrency;
+
+            showMainApp();
+            refreshUserCache().catch(() => {});
+            renderSpendingHeatmap();
+            renderDashboardGoals();
+            renderBudgetSummary();
+            updateAIInsightWidget();
+            return;
         } catch (e) {
             console.error('Invalid user session data', e);
             localStorage.removeItem('financeapp_current_user');
         }
     }
-    
-    // Show landing page if no valid session
+
     console.log('No valid session, showing landing page');
     showLandingPage();
-    
-    // Load saved preferences
+
     const savedCurrency = localStorage.getItem('financeapp_currency') || 'INR';
     currentCurrency = savedCurrency;
 }
@@ -808,7 +811,6 @@ function isValidUser(user) {
 function setupEventListeners() {
     console.log('Setting up event listeners');
     
-    // Navigation - only for items with data-page attribute
     document.querySelectorAll('.menu-item[data-page]').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
@@ -816,11 +818,10 @@ function setupEventListeners() {
             const page = this.dataset.page;
             console.log('Menu item clicked:', page);
             navigateTo(page);
-            // Close mobile menu on navigation
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
-            if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('mobile-open')) {
-                sidebar.classList.remove('mobile-open');
+            if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('sidebar--open')) {
+                sidebar.classList.remove('sidebar--open');
                 if (overlay) overlay.classList.add('hidden');
                 document.body.style.overflow = '';
             }
@@ -833,29 +834,49 @@ function setupEventListeners() {
         });
     });
 
-    // Forms
+    document.querySelectorAll('.bottom-nav-item[data-page]').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const page = this.dataset.page;
+            navigateTo(page);
+        });
+    });
+
+    const menuToggle = document.querySelector('.sidebar-menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.toggleMobileMenu();
+        });
+    }
+
+    const overlay = document.getElementById('mobile-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            window.toggleMobileMenu();
+        });
+    }
+    
     setupFormListeners();
     
-    // Profile picture upload
     const profilePictureInput = document.getElementById('profile-picture-input');
     if (profilePictureInput) {
         profilePictureInput.addEventListener('change', handleProfilePictureUpload);
     }
 
-    // Password strength checking
     const registerPassword = document.getElementById('register-password');
     if (registerPassword) {
         registerPassword.addEventListener('input', checkPasswordStrength);
     }
 
-    // Prevent modal overlay from propagating clicks when clicking inside modal content
     document.querySelectorAll('.modal-content').forEach(content => {
         content.addEventListener('click', function(e) {
             e.stopPropagation();
         });
     });
 
-    // Listen for system theme changes
     if (window.matchMedia) {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (currentTheme === 'auto') {
@@ -1388,7 +1409,6 @@ function loadDashboard() {
     const transactions = getUserTransactions();
     const hasData = transactions.length > 0;
     
-    // Show/hide welcome message for new users
     const welcomeMessage = document.getElementById('welcome-message');
     
     if (welcomeMessage) {
@@ -1399,9 +1419,14 @@ function loadDashboard() {
         }
     }
     
+    updateGreeting();
     calculateAndDisplayStats();
     loadRecentTransactions();
     createCharts();
+    renderSpendingHeatmap();
+    renderDashboardGoals();
+    renderBudgetSummary();
+    updateAIInsightWidget();
 }
 
 function calculateAndDisplayStats() {
@@ -1437,9 +1462,8 @@ function calculateAndDisplayStats() {
 }
 
 function loadRecentTransactions() {
-    // Only show the 5 most recent transactions
     const transactions = getUserTransactions()
-        .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date descending
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
         .slice(0, 5);
         
     const container = document.getElementById('recent-transactions-list');
@@ -1457,20 +1481,189 @@ function loadRecentTransactions() {
         return;
     }
     
-    // Remove the default empty state if it's there
-    container.innerHTML = ''; 
+    renderRecentTransactionsCompact(transactions, container);
+}
 
-    container.innerHTML = transactions.map(transaction => `
-        <div class="transaction-item">
-            <div class="transaction-details">
-                <div class="transaction-description">${transaction.description}</div>
-                <div class="transaction-meta">${transaction.category} • ${formatDate(transaction.date)}</div>
+function renderRecentTransactionsCompact(transactions, container) {
+    if (!container) return;
+
+    const categoryConfig = {
+        'Groceries': { color: '#2dd4bf', bg: 'rgba(45,212,191,0.12)', icon: 'fa-shopping-cart' },
+        'Food': { color: '#2dd4bf', bg: 'rgba(45,212,191,0.12)', icon: 'fa-utensils' },
+        'Transportation': { color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', icon: 'fa-car' },
+        'Travel': { color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', icon: 'fa-plane' },
+        'Shopping': { color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', icon: 'fa-bag-shopping' },
+        'Utilities': { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', icon: 'fa-bolt' },
+        'Bills': { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', icon: 'fa-file-invoice-dollar' },
+        'Rent': { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', icon: 'fa-house' },
+        'Entertainment': { color: '#f43f5e', bg: 'rgba(244,63,94,0.12)', icon: 'fa-film' },
+        'Health': { color: '#22c55e', bg: 'rgba(34,197,94,0.12)', icon: 'fa-heart-pulse' },
+        'Healthcare': { color: '#22c55e', bg: 'rgba(34,197,94,0.12)', icon: 'fa-heart-pulse' },
+        'Salary': { color: '#22c55e', bg: 'rgba(34,197,94,0.12)', icon: 'fa-wallet' },
+        'Investment': { color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', icon: 'fa-chart-line' },
+        'Insurance': { color: '#fbbf24', bg: 'rgba(251,191,36,0.12)', icon: 'fa-shield-halved' },
+        'Education': { color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', icon: 'fa-graduation-cap' },
+        'EMI': { color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', icon: 'fa-credit-card' },
+        'Miscellaneous': { color: '#94a3b8', bg: 'rgba(148,163,184,0.12)', icon: 'fa-ellipsis' }
+    };
+
+    const defaultConfig = { color: '#94a3b8', bg: 'rgba(148,163,184,0.12)', icon: 'fa-receipt' };
+
+    container.innerHTML = transactions.map(t => {
+        const cfg = categoryConfig[t.category] || defaultConfig;
+        const prefix = t.type === 'income' ? '+' : '-';
+        const amountClass = t.type === 'income' ? 'income' : 'expense';
+        const amountColor = t.type === 'income' ? '#22c55e' : '#f43f5e';
+        return `
+            <div class="transaction-item--compact">
+                <div class="transaction-icon-sm" style="background: ${cfg.bg}; color: ${cfg.color};">
+                    <i class="fas ${cfg.icon}"></i>
+                </div>
+                <div class="transaction-details-sm">
+                    <div class="transaction-desc-sm">${t.description}</div>
+                    <div class="transaction-category-sm">${t.category} &middot; ${formatDate(t.date)}</div>
+                </div>
+                <div class="transaction-amount-sm ${amountClass}" style="color: ${amountColor};">
+                    ${prefix}${formatCurrency(Math.abs(t.amount))}
+                </div>
             </div>
-            <div class="transaction-amount ${transaction.type}">
-                ${transaction.type === 'income' ? '+' : '-'}${formatCurrency(Math.abs(transaction.amount))}
+        `;
+    }).join('');
+}
+
+function renderSpendingHeatmap() {
+    const container = document.getElementById('spending-heatmap');
+    if (!container) return;
+
+    const levels = ['empty', 'low', 'low', 'med', 'med', 'high', 'max'];
+    let cells = '';
+    for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 7; col++) {
+            const level = levels[Math.floor(Math.random() * levels.length)];
+            cells += `<div class="heatmap-cell heatmap-cell--${level}"></div>`;
+        }
+    }
+    container.innerHTML = cells;
+}
+
+function renderDashboardGoals() {
+    const container = document.getElementById('goals-progress-list');
+    if (!container) return;
+
+    const goals = getUserGoals();
+
+    if (goals.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No goals set yet</p></div>';
+        return;
+    }
+
+    container.innerHTML = goals.map(goal => {
+        const pct = Math.min(Math.round((goal.current / goal.target) * 100), 100);
+        return `
+            <div class="goal-progress-item">
+                <div class="goal-progress-header">
+                    <span class="goal-progress-name">${goal.name}</span>
+                    <span class="goal-progress-pct">${pct}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${pct}%"></div>
+                </div>
+                <div class="goal-progress-meta">
+                    <span>${formatCurrency(goal.current)} / ${formatCurrency(goal.target)}</span>
+                    <span>${formatDate(goal.deadline)}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderBudgetSummary() {
+    const container = document.getElementById('budget-summary-list');
+    if (!container) return;
+
+    const budgets = getUserBudgets();
+
+    if (budgets.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No budgets created yet</p></div>';
+        return;
+    }
+
+    container.innerHTML = budgets.map(budget => {
+        const pct = budget.allocated > 0 ? Math.min(Math.round((budget.spent / budget.allocated) * 100), 100) : 0;
+        const barColor = pct >= 90 ? '#f43f5e' : pct >= 70 ? '#fbbf24' : '#2dd4bf';
+        return `
+            <div class="budget-summary-item">
+                <div class="budget-summary-header">
+                    <span class="budget-summary-name">${budget.category}</span>
+                    <span class="budget-summary-pct">${pct}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${pct}%; background: ${barColor};"></div>
+                </div>
+                <div class="budget-summary-meta">
+                    <span>${formatCurrency(budget.spent)} spent</span>
+                    <span>${formatCurrency(budget.remaining)} left</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function updateAIInsightWidget() {
+    const widget = document.getElementById('ai-insight-widget');
+    if (!widget) return;
+
+    const transactions = getUserTransactions();
+    if (transactions.length === 0) {
+        widget.innerHTML = '<p class="ai-insight-placeholder">Add transactions to receive AI insights.</p>';
+        return;
+    }
+
+    const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpenses) / totalIncome * 100).toFixed(1) : 0;
+
+    let insight;
+    if (savingsRate >= 30) {
+        insight = { icon: 'fas fa-piggy-bank', color: '#22c55e', title: 'Savings Rate: ' + savingsRate + '%', message: 'Excellent! You\'re saving over 30% of your income. Keep up the great work!' };
+    } else if (savingsRate >= 15) {
+        insight = { icon: 'fas fa-chart-line', color: '#fbbf24', title: 'Savings Rate: ' + savingsRate + '%', message: 'Good progress. Try to increase your savings to 30% for stronger financial health.' };
+    } else {
+        insight = { icon: 'fas fa-triangle-exclamation', color: '#f43f5e', title: 'Savings Rate: ' + savingsRate + '%', message: 'Your savings rate is low. Consider reducing expenses to build a safety net.' };
+    }
+
+    widget.innerHTML = `
+        <div class="ai-insight-card">
+            <div class="ai-insight-icon" style="color: ${insight.color};">
+                <i class="${insight.icon}"></i>
+            </div>
+            <div class="ai-insight-body">
+                <div class="ai-insight-title">${insight.title}</div>
+                <div class="ai-insight-message">${insight.message}</div>
             </div>
         </div>
-    `).join('');
+    `;
+}
+
+function updateGreeting() {
+    const greetingEl = document.getElementById('greeting-text');
+    if (!greetingEl) return;
+
+    const hour = new Date().getHours();
+    let greeting;
+    if (hour < 12) {
+        greeting = 'Good Morning';
+    } else if (hour < 17) {
+        greeting = 'Good Afternoon';
+    } else {
+        greeting = 'Good Evening';
+    }
+
+    if (currentUser && currentUser.profile && currentUser.profile.firstName) {
+        greeting += ', ' + currentUser.profile.firstName;
+    }
+
+    greetingEl.textContent = greeting;
 }
 
 function loadTransactions() {
@@ -1974,7 +2167,6 @@ function createSpendingChart() {
     
     if (!canvas) return;
     
-    // Destroy existing chart instance to prevent memory leaks and conflicts
     let chartInstance = Chart.getChart(canvas);
     if (chartInstance) {
         chartInstance.destroy();
@@ -1993,7 +2185,6 @@ function createSpendingChart() {
     
     const ctx = canvas.getContext('2d');
     
-    // Build monthly income vs expenses line data for last 6 months
     const trendData = {};
     const labels = [];
     const today = new Date();
@@ -2022,7 +2213,7 @@ function createSpendingChart() {
     const expenseData = labels.map(label => trendData[label] ? trendData[label].expense : 0);
     
     const incomeGradient = ctx.createLinearGradient(0, 0, 0, 300);
-    incomeGradient.addColorStop(0, 'rgba(45, 212, 191, 0.4)');
+    incomeGradient.addColorStop(0, 'rgba(45, 212, 191, 0.3)');
     incomeGradient.addColorStop(1, 'rgba(45, 212, 191, 0.0)');
     
     const expenseGradient = ctx.createLinearGradient(0, 0, 0, 300);
@@ -2037,25 +2228,21 @@ function createSpendingChart() {
                 {
                     label: 'Income',
                     data: incomeData,
+                    fill: true,
                     borderColor: '#2dd4bf',
                     backgroundColor: incomeGradient,
                     tension: 0.4,
-                    fill: { target: 'origin', above: incomeGradient },
-                    pointBackgroundColor: '#2dd4bf',
-                    pointBorderColor: '#2dd4bf',
-                    pointRadius: 3,
+                    pointRadius: 0,
                     pointHoverRadius: 6
                 },
                 {
                     label: 'Expenses',
                     data: expenseData,
+                    fill: true,
                     borderColor: '#f87171',
                     backgroundColor: expenseGradient,
                     tension: 0.4,
-                    fill: { target: 'origin', above: expenseGradient },
-                    pointBackgroundColor: '#f87171',
-                    pointBorderColor: '#f87171',
-                    pointRadius: 3,
+                    pointRadius: 0,
                     pointHoverRadius: 6
                 }
             ]
@@ -2070,11 +2257,11 @@ function createSpendingChart() {
                         callback: function(value) { return formatCurrency(value); },
                         color: '#94a3b8'
                     },
-                    grid: { color: 'rgba(255, 255, 255, 0.06)' }
+                    grid: { color: 'rgba(255,255,255,0.05)' }
                 },
                 x: {
                     ticks: { color: '#94a3b8' },
-                    grid: { color: 'rgba(255, 255, 255, 0.06)' }
+                    grid: { color: 'rgba(255,255,255,0.05)' }
                 }
             },
             plugins: {
@@ -2111,7 +2298,6 @@ function createTrendChart() {
     
     if (!canvas) return;
     
-    // Destroy existing chart instance to prevent memory leaks and conflicts
     let chartInstance = Chart.getChart(canvas);
     if (chartInstance) {
         chartInstance.destroy();
@@ -2136,13 +2322,37 @@ function createTrendChart() {
         expensesByCategory[transaction.category] = (expensesByCategory[transaction.category] || 0) + transaction.amount;
     });
 
+    const categoryColors = {
+        'Food': '#2dd4bf',
+        'Groceries': '#2dd4bf',
+        'Travel': '#38bdf8',
+        'Transportation': '#38bdf8',
+        'Shopping': '#a78bfa',
+        'Bills': '#fbbf24',
+        'Utilities': '#fbbf24',
+        'Rent': '#fbbf24',
+        'Entertainment': '#f43f5e',
+        'Health': '#22c55e',
+        'Healthcare': '#22c55e',
+        'Salary': '#22c55e',
+        'Insurance': '#fbbf24',
+        'Education': '#38bdf8',
+        'EMI': '#a78bfa',
+        'Miscellaneous': '#94a3b8',
+        'Investment': '#38bdf8'
+    };
+
+    const fallbackColors = ['#2dd4bf', '#38bdf8', '#a78bfa', '#fbbf24', '#f43f5e', '#22c55e'];
+    const categoryKeys = Object.keys(expensesByCategory);
+    const bgColors = categoryKeys.map((cat, i) => categoryColors[cat] || fallbackColors[i % fallbackColors.length]);
+
     new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: Object.keys(expensesByCategory),
+            labels: categoryKeys,
             datasets: [{
                 data: Object.values(expensesByCategory),
-                backgroundColor: ['#2dd4bf', '#38bdf8', '#a78bfa', '#fbbf24', '#34d399', '#f87171', '#818cf8', '#fb923c', '#e879f9', '#94a3b8'],
+                backgroundColor: bgColors,
                 borderColor: '#0f1420',
                 borderWidth: 2,
                 hoverOffset: 8
@@ -2151,7 +2361,7 @@ function createTrendChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '65%',
+            cutout: '70%',
             plugins: {
                 legend: {
                     position: 'bottom',

@@ -638,183 +638,167 @@
     <div id="main-app" class="app-container hidden">
         <div id="mobile-overlay" class="mobile-overlay hidden" onclick="toggleMobileMenu()"></div>
 
-        <nav class="sidebar" id="sidebar" aria-label="Main navigation">
-            <div class="sidebar-header">
-                <div class="brand">
-                    <i class="fas fa-shield-halved"></i>
-                    <span>FinanceHub</span>
+        <nav class="sidebar sidebar--collapsed" id="sidebar" aria-label="Main navigation">
+            <div class="sidebar-inner">
+                <div class="sidebar-brand">
+                    <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
+                    <span class="brand-text">FinanceHub</span>
                 </div>
                 <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Close menu">
                     <i class="fas fa-xmark"></i>
                 </button>
-            </div>
 
-                <div class="user-profile-section">
-                <div class="user-avatar" onclick="showMyProfile()" role="button" tabindex="0" aria-label="Edit profile">
-                    <div class="avatar-circle" id="profile-avatar">
-                        <i class="fas fa-user"></i>
+                <div class="sidebar-menu">
+                    <div class="menu-item active" data-page="dashboard" role="link" tabindex="0" aria-label="Dashboard" title="Dashboard">
+                        <i class="fas fa-grid-2"></i><span>Dashboard</span>
                     </div>
-                    <div class="avatar-edit-hint">Click to edit</div>
+                    <div class="menu-item" data-page="transactions" role="link" tabindex="0" aria-label="Transactions" title="Transactions">
+                        <i class="fas fa-arrows-left-right"></i><span>Transactions</span>
+                    </div>
+                    <div class="menu-item" data-page="budgets" role="link" tabindex="0" aria-label="Budgets" title="Budgets">
+                        <i class="fas fa-calculator"></i><span>Budgets</span>
+                    </div>
+                    <div class="menu-item" data-page="goals" role="link" tabindex="0" aria-label="Goals" title="Goals">
+                        <i class="fas fa-crosshairs"></i><span>Goals</span>
+                    </div>
+                    <div class="menu-item" data-page="investments" role="link" tabindex="0" aria-label="Investments" title="Investments">
+                        <i class="fas fa-chart-line"></i><span>Investments</span>
+                    </div>
+                    <div class="menu-item" data-page="insights" role="link" tabindex="0" aria-label="AI Insights" title="AI Insights">
+                        <i class="fas fa-lightbulb"></i><span>AI Insights</span>
+                    </div>
+                    <div class="menu-item" data-page="settings" role="link" tabindex="0" aria-label="Settings" title="Settings">
+                        <i class="fas fa-gear"></i><span>Settings</span>
+                    </div>
                 </div>
-                <div class="user-details">
-                    <div class="user-name" id="sidebar-user-name">Demo User</div>
-                    <div class="user-email" id="sidebar-user-email">demo@example.com</div>
-                </div>
-            </div>
 
-            <div class="sidebar-menu">
-                <div class="menu-item active" data-page="dashboard" role="link" tabindex="0" aria-label="Dashboard">
-                    <i class="fas fa-grid-2"></i>
-                    <span>Dashboard</span>
+                <div class="sidebar-bottom">
+                    <div class="menu-item sidebar-profile" onclick="showMyProfile()" role="button" tabindex="0" aria-label="My Profile" title="My Profile">
+                        <div class="sidebar-avatar" id="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="sidebar-user-info">
+                            <div class="user-name" id="sidebar-user-name">Demo User</div>
+                            <div class="user-email" id="sidebar-user-email">demo@example.com</div>
+                        </div>
+                    </div>
+                    <div class="menu-item sidebar-logout" onclick="initiateLogout()" role="button" tabindex="0" aria-label="Sign Out" title="Sign Out">
+                        <i class="fas fa-right-from-bracket"></i><span>Sign Out</span>
+                    </div>
                 </div>
-                <div class="menu-item" data-page="transactions" role="link" tabindex="0" aria-label="Transactions">
-                    <i class="fas fa-arrows-left-right"></i>
-                    <span>Transactions</span>
-                </div>
-                <div class="menu-item" data-page="budgets" role="link" tabindex="0" aria-label="Budgets">
-                    <i class="fas fa-calculator"></i>
-                    <span>Budgets</span>
-                </div>
-                <div class="menu-item" data-page="goals" role="link" tabindex="0" aria-label="Goals">
-                    <i class="fas fa-crosshairs"></i>
-                    <span>Goals</span>
-                </div>
-                <div class="menu-item" data-page="investments" role="link" tabindex="0" aria-label="Investments">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Investments</span>
-                </div>
-                <div class="menu-item" data-page="insights" role="link" tabindex="0" aria-label="AI Insights">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>AI Insights</span>
-                </div>
-                <div class="menu-item" onclick="showMyProfile()" role="button" tabindex="0" aria-label="My Profile">
-                    <i class="fas fa-circle-user"></i>
-                    <span>My Profile</span>
-                </div>
-                <div class="menu-item" data-page="settings" role="link" tabindex="0" aria-label="Settings">
-                    <i class="fas fa-gear"></i>
-                    <span>Settings</span>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <button class="btn btn--danger btn--full-width" onclick="initiateLogout()">
-                    <i class="fas fa-right-from-bracket"></i> Sign Out
-                </button>
             </div>
         </nav>
 
         <main class="main-content" id="main-content">
-            <header class="app-header">
-                <div class="header-left">
-                    <button class="sidebar-menu-toggle btn-icon" onclick="toggleMobileMenu()" aria-label="Open menu">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 id="page-title">Dashboard</h1>
-                </div>
-                <div class="header-actions">
-                    <div class="search-bar">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search transactions..." id="global-search" aria-label="Search transactions">
+                    <div class="topbar-brand">
+                        <i class="fas fa-shield-halved"></i>
+                        <span>FinanceHub</span>
                     </div>
-                    <button class="notification-bell" onclick="showToast('No new notifications', 'info')" aria-label="Notifications">
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-icon-btn" onclick="showToast('No new notifications', 'info')" aria-label="Notifications">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge" id="notification-count">0</span>
                     </button>
-                    <div class="user-info" onclick="showMyProfile()" role="button" tabindex="0" aria-label="View profile">
-                        <span id="user-name">User</span>
-                        <div class="user-avatar-small" id="header-avatar">
-                            <i class="fas fa-user"></i>
-                        </div>
+                    <div class="topbar-avatar" onclick="showMyProfile()" role="button" tabindex="0" aria-label="View profile" id="header-avatar">
+                        <i class="fas fa-user"></i>
                     </div>
                 </div>
             </header>
 
             <!-- ═══════ DASHBOARD PAGE ═══════ -->
             <div id="dashboard-page" class="page-content">
-                <div id="welcome-message" class="welcome-card hidden">
-                    <div class="welcome-icon">
-                        <i class="fas fa-rocket"></i>
+                <div id="welcome-message" class="welcome-compact hidden">
+                    <div class="greeting-section">
+                        <div class="greeting-text">
+                            <h2 id="greeting-text">Good Morning 👋</h2>
+                            <p>Your finances are looking solid this month.</p>
+                        </div>
+                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">
+                            <i class="fas fa-plus"></i> Add Transaction
+                        </button>
                     </div>
-                    <h2>Welcome to FinanceHub!</h2>
-                    <p>Let's get you started on your financial journey. Add your first transaction or set up a
-                        financial goal to begin.</p>
-                    <div class="welcome-actions">
-                        <button class="btn btn--primary" onclick="showTransactionModal()">
-                            <i class="fas fa-plus"></i> Add First Transaction
-                        </button>
-                        <button class="btn btn--outline" onclick="showGoalModal()">
-                            <i class="fas fa-crosshairs"></i> Set First Goal
-                        </button>
+                    <div class="financial-score">
+                        <div class="score-ring">
+                            <span class="score-value" id="financial-score">84</span>
+                            <span class="score-label">/100</span>
+                        </div>
+                        <div class="score-text">
+                            <span class="score-title">Financial Score</span>
+                            <span class="score-sub">You've saved <strong>18%</strong> more than last month.</span>
+                        </div>
                     </div>
                 </div>
 
                 <div id="dashboard-content">
-                    <div class="date-range-filter" style="margin-bottom: var(--sp-5);">
-                        <label for="dashboard-date-from" class="sr-only">From date</label>
-                        <input type="date" class="form-control" id="dashboard-date-from" onchange="loadDashboard()">
-                        <span style="color: var(--color-text-muted);">to</span>
-                        <label for="dashboard-date-to" class="sr-only">To date</label>
-                        <input type="date" class="form-control" id="dashboard-date-to" onchange="loadDashboard()">
-                    </div>
-                    <!-- 5 KPI Metric Cards -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-wallet"></i>
+                    <!-- KPI Cards -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card kpi-card--income">
+                            <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+                            <div class="kpi-info">
+                                <div class="kpi-value" id="total-income">₹0</div>
+                                <div class="kpi-label">Total Income</div>
                             </div>
-                            <div class="stat-info">
-                                <div class="stat-value" id="total-income">₹0</div>
-                                <div class="stat-label">Total Income</div>
-                            </div>
+                            <div class="kpi-badge kpi-badge--up"><i class="fas fa-arrow-up"></i> <span id="income-change">+12%</span></div>
+                            <div class="kpi-glow"></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-arrow-trend-down"></i>
+                        <div class="kpi-card kpi-card--expense">
+                            <div class="kpi-icon"><i class="fas fa-arrow-trend-down"></i></div>
+                            <div class="kpi-info">
+                                <div class="kpi-value" id="total-expenses">₹0</div>
+                                <div class="kpi-label">Monthly Burn</div>
                             </div>
-                            <div class="stat-info">
-                                <div class="stat-value" id="total-expenses">₹0</div>
-                                <div class="stat-label">Monthly Burn</div>
-                            </div>
+                            <div class="kpi-badge kpi-badge--down"><i class="fas fa-arrow-down"></i> <span id="expense-change">-8%</span></div>
+                            <div class="kpi-glow"></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-piggy-bank"></i>
+                        <div class="kpi-card kpi-card--savings">
+                            <div class="kpi-icon"><i class="fas fa-piggy-bank"></i></div>
+                            <div class="kpi-info">
+                                <div class="kpi-value" id="net-savings">₹0</div>
+                                <div class="kpi-label">Net Savings</div>
                             </div>
-                            <div class="stat-info">
-                                <div class="stat-value" id="net-savings">₹0</div>
-                                <div class="stat-label">Net Savings</div>
-                            </div>
+                            <div class="kpi-badge kpi-badge--healthy">▲ Healthy</div>
+                            <div class="kpi-glow"></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-arrow-trend-up"></i>
+                        <div class="kpi-card kpi-card--roi">
+                            <div class="kpi-icon"><i class="fas fa-arrow-trend-up"></i></div>
+                            <div class="kpi-info">
+                                <div class="kpi-value" id="investment-value">₹0</div>
+                                <div class="kpi-label">Total ROI</div>
                             </div>
-                            <div class="stat-info">
-                                <div class="stat-value" id="investment-value">₹0</div>
-                                <div class="stat-label">Total ROI</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-bullseye"></i>
-                            </div>
-                            <div class="stat-info">
-                                <div class="stat-value" id="goals-progress">0%</div>
-                                <div class="stat-label">Goals Progress</div>
-                            </div>
+                            <div class="kpi-badge kpi-badge--up"><i class="fas fa-arrow-up"></i> 16.2%</div>
+                            <div class="kpi-glow"></div>
                         </div>
                     </div>
 
-                    <!-- Charts: Portfolio Performance + Asset Allocation -->
-                    <div class="dashboard-grid">
-                        <div class="chart-card">
-                            <div class="card-header">
+                    <!-- Date Range Filter -->
+                    <div class="date-range-filter">
+                        <label for="dashboard-date-from" class="sr-only">From date</label>
+                        <input type="date" class="form-control" id="dashboard-date-from" onchange="loadDashboard()">
+                        <span class="date-separator">to</span>
+                        <label for="dashboard-date-to" class="sr-only">To date</label>
+                        <input type="date" class="form-control" id="dashboard-date-to" onchange="loadDashboard()">
+                    </div>
+
+                    <!-- Bento Grid -->
+                    <div class="bento-grid">
+                        <!-- Portfolio Chart (large) -->
+                        <div class="bento-card bento-card--wide">
+                            <div class="bento-header">
                                 <h3>Portfolio Performance</h3>
-                                <span class="status status--success"><i class="fas fa-arrow-up"></i> Live</span>
+                                <span class="bento-tag bento-tag--live"><i class="fas fa-circle"></i> Live</span>
                             </div>
-                            <div class="card-body">
-                                <div class="chart-container" style="height: 300px; position: relative;">
+                            <div class="bento-body">
+                                <div class="portfolio-summary">
+                                    <span class="portfolio-value" id="portfolio-total">₹1,28,540</span>
+                                    <span class="portfolio-change"><i class="fas fa-arrow-up"></i> +4.3%</span>
+                                </div>
+                                <div class="chart-container" style="height: 220px; position: relative;">
                                     <canvas id="spending-chart"></canvas>
                                     <div id="no-expense-data" class="empty-state hidden">
                                         <i class="fas fa-chart-pie"></i>
@@ -824,42 +808,125 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="chart-card">
-                            <div class="card-header">
-                                <h3>Asset Allocation</h3>
-                                <span class="status status--info"><i class="fas fa-chart-simple"></i> Trend</span>
+
+                        <!-- Budget Summary -->
+                        <div class="bento-card">
+                            <div class="bento-header">
+                                <h3>Budget Summary</h3>
+                                <button class="btn btn--ghost btn--sm" onclick="navigateTo('budgets')">View All</button>
                             </div>
-                            <div class="card-body">
-                                <div class="chart-container" style="height: 300px; position: relative;">
+                            <div class="bento-body" id="budget-summary-list">
+                                <div class="empty-state empty-state--compact">
+                                    <p>No budgets set</p>
+                                    <button class="btn btn--primary btn--sm" onclick="showBudgetModal()">Create Budget</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Spending Categories -->
+                        <div class="bento-card">
+                            <div class="bento-header">
+                                <h3>Spending by Category</h3>
+                            </div>
+                            <div class="bento-body">
+                                <div class="chart-container" style="height: 200px; position: relative;">
                                     <canvas id="trend-chart"></canvas>
                                     <div id="no-trend-data" class="empty-state hidden">
                                         <i class="fas fa-chart-line"></i>
                                         <p>Build your financial history</p>
-                                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Start Tracking</button>
+                                    </div>
+                                </div>
+                                <div class="category-legend" id="category-legend"></div>
+                            </div>
+                        </div>
+
+                        <!-- Goal Progress -->
+                        <div class="bento-card">
+                            <div class="bento-header">
+                                <h3>Goal Progress</h3>
+                                <button class="btn btn--ghost btn--sm" onclick="navigateTo('goals')">View All</button>
+                            </div>
+                            <div class="bento-body" id="goals-progress-list">
+                                <div class="empty-state empty-state--compact">
+                                    <p>No goals set</p>
+                                    <button class="btn btn--primary btn--sm" onclick="showGoalModal()">Set Goal</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <div class="bento-card bento-card--wide">
+                            <div class="bento-header">
+                                <h3>Recent Transactions</h3>
+                                <button class="btn btn--ghost btn--sm" onclick="navigateTo('transactions')">View All</button>
+                            </div>
+                            <div class="bento-body">
+                                <div class="transaction-list transaction-list--compact" id="recent-transactions-list">
+                                    <div class="empty-state empty-state--compact">
+                                        <p>No transactions yet</p>
+                                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add Transaction</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- AI Insight Widget -->
+                        <div class="bento-card bento-card--ai">
+                            <div class="bento-header">
+                                <h3><i class="fas fa-lightbulb" style="color: var(--cta-gold);"></i> AI Insight</h3>
+                            </div>
+                            <div class="bento-body" id="ai-insight-widget">
+                                <div class="ai-insight-content">
+                                    <p class="ai-insight-text">Add some transactions to get personalized AI insights about your spending patterns.</p>
+                                    <button class="btn btn--outline btn--sm" onclick="navigateTo('insights')">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calendar Heatmap -->
+                        <div class="bento-card">
+                            <div class="bento-header">
+                                <h3>Spending Heatmap</h3>
+                            </div>
+                            <div class="bento-body">
+                                <div class="heatmap-container" id="spending-heatmap"></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Recent Transactions -->
-                    <div class="recent-transactions">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Recent Transactions</h3>
-                                <button class="btn btn--sm btn--primary" onclick="navigateTo('transactions')">View All</button>
+                    <!-- Goals Progress (full width) -->
+                    <div id="goals-progress-section" class="hidden">
+                        <div class="bento-card bento-card--full">
+                            <div class="bento-header">
+                                <h3>Financial Goals</h3>
+                                <button class="btn btn--primary btn--sm" onclick="showGoalModal()"><i class="fas fa-plus"></i> New Goal</button>
                             </div>
-                            <div class="transaction-list" id="recent-transactions-list">
-                                <div class="empty-state">
-                                    <i class="fas fa-receipt"></i>
-                                    <p>No transactions yet</p>
-                                    <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">Add Transaction</button>
-                                </div>
+                            <div class="bento-body">
+                                <div class="goals-grid" id="dashboard-goals-grid"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Mobile Bottom Nav -->
+            <nav class="bottom-nav" aria-label="Mobile navigation">
+                <button class="bottom-nav-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-grid-2"></i><span>Home</span>
+                </button>
+                <button class="bottom-nav-item" data-page="transactions" onclick="navigateTo('transactions')">
+                    <i class="fas fa-arrows-left-right"></i><span>History</span>
+                </button>
+                <button class="bottom-nav-item bottom-nav-add" onclick="showTransactionModal()">
+                    <div class="bottom-nav-add-btn"><i class="fas fa-plus"></i></div>
+                </button>
+                <button class="bottom-nav-item" data-page="goals" onclick="navigateTo('goals')">
+                    <i class="fas fa-crosshairs"></i><span>Goals</span>
+                </button>
+                <button class="bottom-nav-item" data-page="settings" onclick="navigateTo('settings')">
+                    <i class="fas fa-user"></i><span>Profile</span>
+                </button>
+            </nav>
 
             <!-- ═══════ PROFILE MODAL ═══════ -->
             <div id="profile-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
