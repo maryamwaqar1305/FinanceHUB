@@ -848,15 +848,6 @@ function setupEventListeners() {
         registerPassword.addEventListener('input', checkPasswordStrength);
     }
 
-    // Theme toggle buttons
-    document.querySelectorAll('.theme-toggle').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.toggleTheme();
-        });
-    });
-
     // Prevent modal overlay from propagating clicks when clicking inside modal content
     document.querySelectorAll('.modal-content').forEach(content => {
         content.addEventListener('click', function(e) {

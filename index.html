@@ -109,13 +109,10 @@
                         <a href="#testimonials" class="nav-link">Testimonials</a>
                         <a href="#faq" class="nav-link">FAQ</a>
                     </div>
-                    <div class="nav-actions">
-                        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
-                            <i class="fas fa-moon" id="theme-icon"></i>
-                        </button>
-                        <button class="btn btn--outline" onclick="showLogin()">Login</button>
-                        <button class="btn btn--primary" onclick="showRegister()">Get Started Free</button>
-                    </div>
+            <div class="nav-actions">
+                <button class="btn btn--outline" onclick="showLogin()">Login</button>
+                <button class="btn btn--primary" onclick="showRegister()">Get Started Free</button>
+            </div>
                 </nav>
             </div>
         </div>
@@ -724,9 +721,6 @@
                     <button class="notification-bell" onclick="showToast('No new notifications', 'info')" aria-label="Notifications">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge" id="notification-count">0</span>
-                    </button>
-                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="Toggle theme">
-                        <i class="fas fa-moon" id="theme-icon-header"></i>
                     </button>
                     <div class="user-info" onclick="showMyProfile()" role="button" tabindex="0" aria-label="View profile">
                         <span id="user-name">User</span>
