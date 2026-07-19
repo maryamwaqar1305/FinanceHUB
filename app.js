@@ -748,7 +748,7 @@ function applyTheme(theme) {
 }
 
 function updateThemeIcons() {
-    const themeIcons = document.querySelectorAll('#theme-icon, #theme-icon-header');
+    const themeIcons = document.querySelectorAll('#theme-icon');
     let iconClass = 'fas fa-adjust'; // Default for auto
     
     if (currentTheme === 'light') {
@@ -843,21 +843,7 @@ function setupEventListeners() {
         });
     });
 
-    const menuToggle = document.querySelector('.sidebar-menu-toggle');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.toggleMobileMenu();
-        });
-    }
 
-    const overlay = document.getElementById('mobile-overlay');
-    if (overlay) {
-        overlay.addEventListener('click', function() {
-            window.toggleMobileMenu();
-        });
-    }
     
     setupFormListeners();
     
@@ -936,16 +922,6 @@ function setupFormListeners() {
     const transactionFilter = document.getElementById('transaction-filter');
     if (transactionFilter) {
         transactionFilter.addEventListener('change', filterTransactions);
-    }
-
-    // Global search
-    const globalSearch = document.getElementById('global-search');
-    if (globalSearch) {
-        globalSearch.addEventListener('input', debounce(function() {
-            const query = this.value.trim().toLowerCase();
-            if (currentPage !== 'transactions') navigateTo('transactions');
-            displayTransactions(query);
-        }, 300));
     }
 }
 
@@ -1442,7 +1418,25 @@ function calculateAndDisplayStats() {
     const totalIncome = filtered.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
     const totalExpenses = filtered.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
     const netSavings = totalIncome - totalExpenses;
-    const investmentValue = 0; // Placeholder for investments
+
+    // Compute all-time totals for portfolio & change comparison
+    const allTimeIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const allTimeExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    const portfolioTotal = allTimeIncome - allTimeExpenses;
+
+    // Compute previous-period amounts for change badges
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const prevStart = new Date(currentYear, currentMonth - 1, 1).toISOString().slice(0, 10);
+    const prevEnd = new Date(currentYear, currentMonth, 0).toISOString().slice(0, 10);
+    const prevIncome = transactions.filter(t => t.type === 'income' && t.date >= prevStart && t.date <= prevEnd).reduce((sum, t) => sum + t.amount, 0);
+    const prevExpenses = transactions.filter(t => t.type === 'expense' && t.date >= prevStart && t.date <= prevEnd).reduce((sum, t) => sum + t.amount, 0);
+    const incomeChange = prevIncome > 0 ? Math.round(((totalIncome - prevIncome) / prevIncome) * 100) : 0;
+    const expenseChange = prevExpenses > 0 ? Math.round(((totalExpenses - prevExpenses) / prevExpenses) * 100) : 0;
+
+    // Investment value from any transactions with 'investment' or 'dividend' category
+    const investmentTotal = transactions.filter(t => t.category === 'Investment' || t.category === 'Dividend').reduce((sum, t) => sum + t.amount, 0);
 
     // Calculate overall goals progress
     const goals = getUserGoals();
@@ -1452,13 +1446,74 @@ function calculateAndDisplayStats() {
         const totalGoalCurrent = goals.reduce((sum, g) => sum + g.current, 0);
         goalsProgress = totalGoalTarget > 0 ? Math.round((totalGoalCurrent / totalGoalTarget) * 100) : 0;
     }
-    
+
+    // Compute financial score (0-100) based on real metrics
+    let score = 50;
+    if (transactions.length > 0) {
+        const savingsRate = totalIncome > 0 ? netSavings / totalIncome : 0;
+        const expenseRatio = totalIncome > 0 ? totalExpenses / totalIncome : 1;
+        const hasGoals = goals.length > 0;
+        const txCount = Math.min(transactions.length / 20, 1);
+
+        score = Math.round(
+            (savingsRate * 35) +           // savings rate: up to 35 pts
+            ((1 - expenseRatio) * 25) +     // expense control: up to 25 pts
+            (hasGoals ? goalsProgress * 0.2 : 0) + // goals progress: up to 20 pts
+            (txCount * 20)                  // engagement: up to 20 pts
+        );
+        score = Math.max(0, Math.min(100, score));
+    }
+
     // Update stats display
     updateElementText('total-income', formatCurrency(totalIncome));
     updateElementText('total-expenses', formatCurrency(totalExpenses));
     updateElementText('net-savings', formatCurrency(netSavings));
-    updateElementText('investment-value', formatCurrency(investmentValue));
-    updateElementText('goals-progress', goalsProgress + '%');
+    updateElementText('investment-value', formatCurrency(investmentTotal));
+    updateElementText('financial-score', score);
+    updateElementText('portfolio-total', formatCurrency(portfolioTotal));
+
+    // Update financial score SVG ring
+    const scoreCircle = document.querySelector('.score-ring-fill');
+    if (scoreCircle) {
+        const circumference = 2 * Math.PI * 42;
+        const offset = circumference - (score / 100) * circumference;
+        scoreCircle.style.strokeDashoffset = offset;
+    }
+
+    // Update income/expense change badges
+    const incomeBadge = document.getElementById('income-change');
+    if (incomeBadge) {
+        const sign = incomeChange >= 0 ? '+' : '';
+        incomeBadge.textContent = sign + incomeChange + '%';
+        const badge = incomeBadge.closest('.kpi-badge');
+        if (badge) {
+            badge.className = 'kpi-badge ' + (incomeChange >= 0 ? 'kpi-badge--up' : 'kpi-badge--down');
+        }
+    }
+    const expenseBadge = document.getElementById('expense-change');
+    if (expenseBadge) {
+        const sign = expenseChange >= 0 ? '+' : '';
+        expenseBadge.textContent = sign + expenseChange + '%';
+        const badge = expenseBadge.closest('.kpi-badge');
+        if (badge) {
+            badge.className = 'kpi-badge ' + (expenseChange >= 0 ? 'kpi-badge--down' : 'kpi-badge--up');
+        }
+    }
+
+    // Update score subtitle with savings rate comparison
+    const scoreSub = document.querySelector('.score-sub');
+    if (scoreSub && totalIncome > 0) {
+        const savingsPct = Math.round((netSavings / totalIncome) * 100);
+        const prevSavingsRate = prevIncome > 0 ? Math.round(((prevIncome - prevExpenses) / prevIncome) * 100) : 0;
+        const diff = savingsPct - prevSavingsRate;
+        const direction = diff >= 0 ? 'more' : 'less';
+        scoreSub.innerHTML = `You've saved <strong>${Math.abs(diff)}%</strong> ${direction} than last month.`;
+    }
+
+    const goalsSection = document.getElementById('goals-progress-section');
+    if (goalsSection) {
+        goalsSection.classList.toggle('hidden', goals.length === 0);
+    }
 }
 
 function loadRecentTransactions() {
@@ -1547,7 +1602,7 @@ function renderSpendingHeatmap() {
 }
 
 function renderDashboardGoals() {
-    const container = document.getElementById('goals-progress-list');
+    const container = document.getElementById('dashboard-goals-grid');
     if (!container) return;
 
     const goals = getUserGoals();

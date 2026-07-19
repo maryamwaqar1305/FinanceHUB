@@ -644,9 +644,6 @@
                     <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
                     <span class="brand-text">FinanceHub</span>
                 </div>
-                <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Close menu">
-                    <i class="fas fa-xmark"></i>
-                </button>
 
                 <div class="sidebar-menu">
                     <div class="menu-item active" data-page="dashboard" role="link" tabindex="0" aria-label="Dashboard" title="Dashboard">
@@ -692,9 +689,7 @@
         <main class="main-content" id="main-content">
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="sidebar-menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <span id="page-title" class="topbar-page-title">Dashboard</span>
                     <div class="topbar-brand">
                         <i class="fas fa-shield-halved"></i>
                         <span>FinanceHub</span>
@@ -713,24 +708,36 @@
 
             <!-- ═══════ DASHBOARD PAGE ═══════ -->
             <div id="dashboard-page" class="page-content">
-                <div id="welcome-message" class="welcome-compact hidden">
-                    <div class="greeting-section">
-                        <div class="greeting-text">
-                            <h2 id="greeting-text">Good Morning 👋</h2>
-                            <p>Your finances are looking solid this month.</p>
+                <div id="welcome-message" class="hidden">
+                    <div class="dash-hero">
+                        <div class="dash-hero-left">
+                            <div class="dash-greeting">
+                                <h2 id="greeting-text">Good Morning 👋</h2>
+                                <p class="dash-greeting-sub">Your finances are looking solid this month.</p>
+                            </div>
+                            <div class="dash-hero-actions">
+                                <button class="btn btn--primary" onclick="showTransactionModal()">
+                                    <i class="fas fa-plus"></i> Add Transaction
+                                </button>
+                            </div>
                         </div>
-                        <button class="btn btn--primary btn--sm" onclick="showTransactionModal()">
-                            <i class="fas fa-plus"></i> Add Transaction
-                        </button>
-                    </div>
-                    <div class="financial-score">
-                        <div class="score-ring">
-                            <span class="score-value" id="financial-score">84</span>
-                            <span class="score-label">/100</span>
-                        </div>
-                        <div class="score-text">
-                            <span class="score-title">Financial Score</span>
-                            <span class="score-sub">You've saved <strong>18%</strong> more than last month.</span>
+                        <div class="dash-hero-right">
+                            <div class="financial-score">
+                                <div class="score-visual">
+                                    <svg class="score-ring-svg" viewBox="0 0 100 100">
+                                        <circle class="score-ring-bg" cx="50" cy="50" r="42"/>
+                                        <circle class="score-ring-fill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="42.22"/>
+                                    </svg>
+                                    <div class="score-ring-inner">
+                                        <span class="score-value" id="financial-score">--</span>
+                                        <span class="score-unit">/100</span>
+                                    </div>
+                                </div>
+                                <div class="score-detail">
+                                    <span class="score-title">Financial Score</span>
+                                    <span class="score-sub">You've saved <strong>18%</strong> more than last month.</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -739,40 +746,40 @@
                     <!-- KPI Cards -->
                     <div class="kpi-grid">
                         <div class="kpi-card kpi-card--income">
+                            <div class="kpi-card-bg"></div>
                             <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
                             <div class="kpi-info">
                                 <div class="kpi-value" id="total-income">₹0</div>
                                 <div class="kpi-label">Total Income</div>
                             </div>
                             <div class="kpi-badge kpi-badge--up"><i class="fas fa-arrow-up"></i> <span id="income-change">+12%</span></div>
-                            <div class="kpi-glow"></div>
                         </div>
                         <div class="kpi-card kpi-card--expense">
+                            <div class="kpi-card-bg"></div>
                             <div class="kpi-icon"><i class="fas fa-arrow-trend-down"></i></div>
                             <div class="kpi-info">
                                 <div class="kpi-value" id="total-expenses">₹0</div>
                                 <div class="kpi-label">Monthly Burn</div>
                             </div>
                             <div class="kpi-badge kpi-badge--down"><i class="fas fa-arrow-down"></i> <span id="expense-change">-8%</span></div>
-                            <div class="kpi-glow"></div>
                         </div>
                         <div class="kpi-card kpi-card--savings">
+                            <div class="kpi-card-bg"></div>
                             <div class="kpi-icon"><i class="fas fa-piggy-bank"></i></div>
                             <div class="kpi-info">
                                 <div class="kpi-value" id="net-savings">₹0</div>
                                 <div class="kpi-label">Net Savings</div>
                             </div>
                             <div class="kpi-badge kpi-badge--healthy">▲ Healthy</div>
-                            <div class="kpi-glow"></div>
                         </div>
                         <div class="kpi-card kpi-card--roi">
+                            <div class="kpi-card-bg"></div>
                             <div class="kpi-icon"><i class="fas fa-arrow-trend-up"></i></div>
                             <div class="kpi-info">
                                 <div class="kpi-value" id="investment-value">₹0</div>
                                 <div class="kpi-label">Total ROI</div>
                             </div>
                             <div class="kpi-badge kpi-badge--up"><i class="fas fa-arrow-up"></i> 16.2%</div>
-                            <div class="kpi-glow"></div>
                         </div>
                     </div>
 
@@ -785,20 +792,20 @@
                         <input type="date" class="form-control" id="dashboard-date-to" onchange="loadDashboard()">
                     </div>
 
-                    <!-- Bento Grid -->
-                    <div class="bento-grid">
-                        <!-- Portfolio Chart (large) -->
-                        <div class="bento-card bento-card--wide">
-                            <div class="bento-header">
-                                <h3>Portfolio Performance</h3>
-                                <span class="bento-tag bento-tag--live"><i class="fas fa-circle"></i> Live</span>
+                    <!-- Dashboard 2-Column Grid -->
+                    <div class="dash-grid">
+                        <!-- Portfolio Performance -->
+                        <div class="dash-card dash-card--span2">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-chart-area"></i> Portfolio Performance</h3>
+                                <span class="dash-tag dash-tag--live"><i class="fas fa-circle"></i> Live</span>
                             </div>
-                            <div class="bento-body">
+                            <div class="dash-card-body">
                                 <div class="portfolio-summary">
                                     <span class="portfolio-value" id="portfolio-total">₹1,28,540</span>
                                     <span class="portfolio-change"><i class="fas fa-arrow-up"></i> +4.3%</span>
                                 </div>
-                                <div class="chart-container" style="height: 220px; position: relative;">
+                                <div class="chart-container" style="height: 240px; position: relative;">
                                     <canvas id="spending-chart"></canvas>
                                     <div id="no-expense-data" class="empty-state hidden">
                                         <i class="fas fa-chart-pie"></i>
@@ -809,26 +816,12 @@
                             </div>
                         </div>
 
-                        <!-- Budget Summary -->
-                        <div class="bento-card">
-                            <div class="bento-header">
-                                <h3>Budget Summary</h3>
-                                <button class="btn btn--ghost btn--sm" onclick="navigateTo('budgets')">View All</button>
-                            </div>
-                            <div class="bento-body" id="budget-summary-list">
-                                <div class="empty-state empty-state--compact">
-                                    <p>No budgets set</p>
-                                    <button class="btn btn--primary btn--sm" onclick="showBudgetModal()">Create Budget</button>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Spending Categories -->
-                        <div class="bento-card">
-                            <div class="bento-header">
-                                <h3>Spending by Category</h3>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-chart-pie"></i> Spending by Category</h3>
                             </div>
-                            <div class="bento-body">
+                            <div class="dash-card-body">
                                 <div class="chart-container" style="height: 200px; position: relative;">
                                     <canvas id="trend-chart"></canvas>
                                     <div id="no-trend-data" class="empty-state hidden">
@@ -840,27 +833,13 @@
                             </div>
                         </div>
 
-                        <!-- Goal Progress -->
-                        <div class="bento-card">
-                            <div class="bento-header">
-                                <h3>Goal Progress</h3>
-                                <button class="btn btn--ghost btn--sm" onclick="navigateTo('goals')">View All</button>
-                            </div>
-                            <div class="bento-body" id="goals-progress-list">
-                                <div class="empty-state empty-state--compact">
-                                    <p>No goals set</p>
-                                    <button class="btn btn--primary btn--sm" onclick="showGoalModal()">Set Goal</button>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Recent Transactions -->
-                        <div class="bento-card bento-card--wide">
-                            <div class="bento-header">
-                                <h3>Recent Transactions</h3>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-arrows-left-right"></i> Recent Transactions</h3>
                                 <button class="btn btn--ghost btn--sm" onclick="navigateTo('transactions')">View All</button>
                             </div>
-                            <div class="bento-body">
+                            <div class="dash-card-body">
                                 <div class="transaction-list transaction-list--compact" id="recent-transactions-list">
                                     <div class="empty-state empty-state--compact">
                                         <p>No transactions yet</p>
@@ -871,24 +850,40 @@
                         </div>
 
                         <!-- AI Insight Widget -->
-                        <div class="bento-card bento-card--ai">
-                            <div class="bento-header">
+                        <div class="dash-card dash-card--ai">
+                            <div class="dash-card-header">
                                 <h3><i class="fas fa-lightbulb" style="color: var(--cta-gold);"></i> AI Insight</h3>
                             </div>
-                            <div class="bento-body" id="ai-insight-widget">
-                                <div class="ai-insight-content">
-                                    <p class="ai-insight-text">Add some transactions to get personalized AI insights about your spending patterns.</p>
-                                    <button class="btn btn--outline btn--sm" onclick="navigateTo('insights')">View Details</button>
+                            <div class="dash-card-body">
+                                <div id="ai-insight-widget">
+                                    <div class="ai-insight-content">
+                                        <p class="ai-insight-text">Add some transactions to get personalized AI insights about your spending patterns.</p>
+                                        <button class="btn btn--outline btn--sm" onclick="navigateTo('insights')">View Details</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Calendar Heatmap -->
-                        <div class="bento-card">
-                            <div class="bento-header">
-                                <h3>Spending Heatmap</h3>
+                        <!-- Budget Summary -->
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-calculator"></i> Budget Summary</h3>
+                                <button class="btn btn--ghost btn--sm" onclick="navigateTo('budgets')">View All</button>
                             </div>
-                            <div class="bento-body">
+                            <div class="dash-card-body" id="budget-summary-list">
+                                <div class="empty-state empty-state--compact">
+                                    <p>No budgets set</p>
+                                    <button class="btn btn--primary btn--sm" onclick="showBudgetModal()">Create Budget</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Spending Heatmap -->
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-calendar"></i> Spending Heatmap</h3>
+                            </div>
+                            <div class="dash-card-body">
                                 <div class="heatmap-container" id="spending-heatmap"></div>
                             </div>
                         </div>
@@ -896,12 +891,12 @@
 
                     <!-- Goals Progress (full width) -->
                     <div id="goals-progress-section" class="hidden">
-                        <div class="bento-card bento-card--full">
-                            <div class="bento-header">
-                                <h3>Financial Goals</h3>
+                        <div class="dash-card dash-card--full">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-crosshairs"></i> Financial Goals</h3>
                                 <button class="btn btn--primary btn--sm" onclick="showGoalModal()"><i class="fas fa-plus"></i> New Goal</button>
                             </div>
-                            <div class="bento-body">
+                            <div class="dash-card-body">
                                 <div class="goals-grid" id="dashboard-goals-grid"></div>
                             </div>
                         </div>
@@ -1199,7 +1194,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="theme-select">Theme</label>
+                                <label class="form-label" for="theme-select">Theme <i id="theme-icon" class="fas fa-adjust" style="margin-left:8px"></i></label>
                                 <select class="form-control" id="theme-select">
                                     <option value="auto">Auto (System)</option>
                                     <option value="light">Light Mode</option>
