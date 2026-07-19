@@ -1191,10 +1191,9 @@
 .social-proof-bar {
   background: var(--surface-200);
   border-bottom: 1px solid var(--color-border);
-  padding: var(--sp-3) 0;
+  padding: var(--sp-4) 0;
   font-size: var(--fs-sm);
   color: var(--color-text-secondary);
-  text-align: center;
 }
 .social-proof-bar .container {
   display: flex;
@@ -1258,15 +1257,15 @@
 
 /* ── Landing Hero ─────────────────────────────────────────────────────── */
 .landing-hero {
-  padding-top: 120px;
-  padding-bottom: var(--sp-16);
+  padding-top: 180px;
+  padding-bottom: var(--sp-20);
   position: relative;
   overflow: hidden;
 }
 .hero-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--sp-12);
+  gap: var(--sp-16);
   align-items: center;
 }
 .hero-text h1 {
@@ -1418,7 +1417,7 @@
 .section-header {
   text-align: center;
   max-width: 640px;
-  margin: 0 auto var(--sp-12);
+  margin: 0 auto var(--sp-20);
 }
 .section-header h2 {
   font-size: var(--fs-3xl);
@@ -1435,7 +1434,7 @@
 .section-header--light p { color: #ffffff; }
 
 .landing-section {
-  padding: var(--sp-20) 0;
+  padding: var(--sp-24) 0;
 }
 .section--alt { background: var(--surface-100); }
 
@@ -1496,8 +1495,8 @@
 .problem-solution {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--sp-8);
-  margin-bottom: var(--sp-8);
+  gap: var(--sp-10);
+  margin-bottom: var(--sp-10);
 }
 .problem-solution:last-child { margin-bottom: 0; }
 .ps-content { padding: var(--sp-6); }
@@ -1713,7 +1712,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: var(--sp-8);
-  padding: var(--sp-12) 0;
+  padding: var(--sp-16) 0;
 }
 .footer-brand p {
   font-size: var(--fs-sm);
